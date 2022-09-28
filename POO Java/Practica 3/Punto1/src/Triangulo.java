@@ -66,5 +66,4 @@ public class Triangulo {
         double s = ((this.lado1 + this.lado2 + this.lado3) / 2);
         return (int)Math.sqrt(s*(s-this.lado1)*(s-this.lado2)*(s-this.lado3));
     }
-    
 }
