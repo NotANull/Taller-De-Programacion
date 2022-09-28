@@ -42,6 +42,4 @@ public class Autor {
     public String toString() {
         return "Nombre: " + this.nombre + " - Biografia: " + this.biografia + " - Orden: " + this.origen;
     }
-    
-    
 }
