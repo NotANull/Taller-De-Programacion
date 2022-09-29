@@ -23,7 +23,6 @@ public class MainPunto1 {
         
         System.out.println("Perímetro: " + t.calcularPerimetro());
         System.out.println("Área: " + t.calcularArea());
-        
     }
 
 }
