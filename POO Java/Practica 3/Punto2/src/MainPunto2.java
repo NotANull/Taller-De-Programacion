@@ -7,7 +7,6 @@ public class MainPunto2 {
         
         Libro libro1 = new Libro("Java: A Beginner's Guide", "Mcgraw-Hill", 2014, a, "978-0071809252", 21.72);
         System.out.println(libro1.toString());
-        
     }
 
 }
