@@ -22,16 +22,15 @@ public class Entrenador extends Empleado {
     }
 
     @Override
-    public double calcularSueldoACobrar() {
-        double sueldo = super.calcularSueldoACobrar();
+    public double calcularExtra() {
         if ( (this.cantCampeonatosGanados >= 1) && (this.cantCampeonatosGanados <= 4) ) {
-            return sueldo + 5000;
+            return 5000;
         } else if ((this.cantCampeonatosGanados >= 5) && (this.cantCampeonatosGanados <= 10)) {
-            return sueldo + 30000;
+            return 30000;
         } else if (this.cantCampeonatosGanados > 10) {
-            return sueldo + 50000;
+            return 50000;
         } else {
-            return sueldo;
+            return 0;
         }
     }
     
