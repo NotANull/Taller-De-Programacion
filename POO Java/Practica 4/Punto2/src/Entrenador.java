@@ -23,7 +23,7 @@ public class Entrenador extends Empleado {
 
     @Override
     public double calcularSueldoACobrar() {
-        double sueldo = (super.getSueldoBasico()) + ((super.getSueldoBasico() * 0.1) * super.getAntiguedad());
+        double sueldo = super.calcularSueldoACobrar();
         if ( (this.cantCampeonatosGanados >= 1) && (this.cantCampeonatosGanados <= 4) ) {
             return sueldo + 5000;
         } else if ((this.cantCampeonatosGanados >= 5) && (this.cantCampeonatosGanados <= 10)) {
