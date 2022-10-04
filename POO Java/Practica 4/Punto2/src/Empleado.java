@@ -37,7 +37,11 @@ public abstract class Empleado {
     
     public abstract double calcularEfectividad();
     
-    public abstract double calcularSueldoACobrar();
+    public abstract double calcularExtra();
+    
+    public double calcularSueldoACobrar() {
+       return (this.getSueldoBasico()) + ((this.getSueldoBasico() * 0.1) * this.getAntiguedad()) + this.calcularExtra();
+    }
 
     @Override
     public String toString() {

@@ -32,12 +32,11 @@ public class Jugador extends Empleado {
     }
 
     @Override
-    public double calcularSueldoACobrar() {
-        double sueldo = (super.getSueldoBasico()) + ((super.getSueldoBasico() * 0.1) * super.getAntiguedad());
+    public double calcularExtra() {
         if (this.calcularEfectividad() > 0.5) {
-            return sueldo + super.getSueldoBasico();
+            return this.getSueldoBasico();
         } else {
-            return sueldo;
+            return 0;
         }
     }
 
