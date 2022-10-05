@@ -14,9 +14,17 @@ public class Evento extends Recital {
         setDia(dia);
     }
     
-    @Override
+   
     public String actuar() {
-        return "";
+         String aux="";
+         if(getMotivo().equals("show de beneficencia")){
+           aux="recuerde colaborar con"+getNombreContratante();
+         }else if(getMotivo().equals("show de TV")){
+              aux="saludos amigos televidentes";
+         }else if(getMotivo().equals("show privado")){
+              aux="un feliz cumpleaños para"+getNombreContratante();
+         }
+        return super.actuar()+aux;
     }
     
 
