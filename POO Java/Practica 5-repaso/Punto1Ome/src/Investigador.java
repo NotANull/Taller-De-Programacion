@@ -53,12 +53,13 @@ public class Investigador {
         this.cantSubsidios++;
         if (this.cantSubsidios < this.maxSubsidios) {
             this.subsidios[this.cantSubsidios] = unSubsidio;
+            this.subsidios[this.cantSubsidios].setOtorgado(true);
         }
     }
     
     public void otorgarTodos(String nombreCompleto) {
         if (this.nombreInvestigador.equals(nombreCompleto)) {
-            for (int i = 0; i < this.cantSubsidios; i++) {
+            for (int i = 0; i <= this.cantSubsidios; i++) {
                 if (this.subsidios[i].isOtorgado() == false) {
                     this.subsidios[i].setOtorgado(true);
                 }
@@ -68,7 +69,7 @@ public class Investigador {
     
     public double totalEnSubsidios() {
         double sumaSubsidios = 0;
-        for (int i = 0; i < this.cantSubsidios; i++) {
+        for (int i = 0; i <= this.cantSubsidios; i++) {
             if (this.subsidios[i].isOtorgado() == true) {
                 sumaSubsidios += this.subsidios[i].getMontoPedido();
             }

@@ -58,7 +58,7 @@ public class Proyecto {
     
     public double dineroTotalOtorgado() {
         double sumaDinero = 0;
-        for (int i = 0; i < this.cantInvestigadores; i++) {
+        for (int i = 0; i <= this.cantInvestigadores; i++) {
             sumaDinero += this.investigadores[i].totalEnSubsidios();
         }
         return sumaDinero;
@@ -66,7 +66,7 @@ public class Proyecto {
     
     public String mostrarInvestigador() {
         String cadena = "";
-        for (int i = 0; i < this.cantInvestigadores; i++) {
+        for (int i = 0; i <= this.cantInvestigadores; i++) {
             cadena += this.investigadores[i];
         }
         return cadena;
