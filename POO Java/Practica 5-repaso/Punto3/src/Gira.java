@@ -39,7 +39,7 @@ public class Gira extends Recital {
         
             fechaActual--;}
         
-        return aux;
+        return aux+super.actuar();
     }
     
     public boolean hayLugar(){
