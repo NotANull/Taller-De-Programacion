@@ -34,8 +34,8 @@ public class Gira extends Recital {
     
     public String actuar(){
         String aux ="";
-        if(fechaActual < cantMaxFechas && fechaActual>-1){
-            aux = "Buenas noches"+vector[fechaActual].getCiudad()+super.imprimirTemas();
+        if(fechaActual <= cantMaxFechas && fechaActual>-1){
+            aux = "Buenas noches"+vector[fechaActual].getCiudad();
         
             fechaActual--;}
         
