@@ -26,12 +26,16 @@ public abstract class Recital {
         }
     }
     
-    public String imprimirTemas(){
-        System.out.print("y ahora tocaremos");
-        return "";
+    public String actuar(){
+        
+        String aux=" Y ahora tocaremos";
+        for(int i=0;i<=cantTemas;i++){
+            aux+=v[i]+" ";
+        }
+        return aux;
     }
     
-    public abstract String actuar();                   //abstract method
+    //public abstract String actuar();                   //abstract method
 
     
     
