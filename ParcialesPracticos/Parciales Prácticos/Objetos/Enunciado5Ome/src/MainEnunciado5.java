@@ -11,13 +11,13 @@ public class MainEnunciado5 {
         Paciente p6 = new Paciente("Nombre Paciente 6", true, 6060);//
         Paciente p7 = new Paciente("Nombre Paciente 7", true, 7070);//
         Paciente p8 = new Paciente("Nombre Paciente 8", true, 8080);//
-        Paciente p9 = new Paciente("Nombre Paciente 9", true, 8080);//
-        Paciente p10 = new Paciente("Nombre Paciente 10", true, 8080);//
-        Paciente p11 = new Paciente("Nombre Paciente 11", true, 8080);//
-        Paciente p12 = new Paciente("Nombre Paciente 12", true, 8080);//
-        Paciente p13 = new Paciente("Nombre Paciente 13", true, 8080);//
-        Paciente p14 = new Paciente("Nombre Paciente 14", true, 8080);//
-        Paciente p15 = new Paciente("Nombre Paciente 15", true, 8080);//
+        Paciente p9 = new Paciente("Nombre Paciente 9", true, 9090);//
+        Paciente p10 = new Paciente("Nombre Paciente 10", true, 100100);//
+        Paciente p11 = new Paciente("Nombre Paciente 11", true, 110110);//
+        Paciente p12 = new Paciente("Nombre Paciente 12", true, 120120);//
+        Paciente p13 = new Paciente("Nombre Paciente 13", true, 130130);//
+        Paciente p14 = new Paciente("Nombre Paciente 14", true, 140140);//
+        Paciente p15 = new Paciente("Nombre Paciente 15", true, 150150);//
         
         Agenda agenda = new Agenda();
         
