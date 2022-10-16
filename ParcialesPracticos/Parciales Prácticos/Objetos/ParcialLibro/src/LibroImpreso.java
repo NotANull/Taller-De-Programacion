@@ -17,6 +17,11 @@ public class LibroImpreso extends Libro{
         }
     }
 
+    @Override
+    public String toString() {
+        return "LIBRO IMPRESO\n" + super.toString();
+    }
+
     
     
 }

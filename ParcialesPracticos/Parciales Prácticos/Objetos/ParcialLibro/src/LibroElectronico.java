@@ -15,5 +15,10 @@ public class LibroElectronico extends Libro{
         return (2.5 * this.mb);
     }
 
+    @Override
+    public String toString() {
+        return "LIBRO ELECTRÓNICO\n" + super.toString();
+    }
+
     
 }
