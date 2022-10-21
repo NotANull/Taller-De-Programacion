@@ -1,0 +1,43 @@
+programa punto1
+procesos
+  proceso juntarYMover(ES flores: numero; ES esquinaSinFlores: numero)
+  comenzar
+    repetir 99
+      si(~HayFlorEnLaEsquina)
+        esquinaSinFlores:= esquinaSinFlores + 1
+      mientras(HayFlorEnLaEsquina)
+        tomarFlor
+        flores:= flores + 1
+      mover
+    si(~HayFlorEnLaEsquina)
+      esquinaSinFlores:= esquinaSinFlores + 1
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      flores:= flores + 1
+  fin
+  proceso depositar(E flores: numero)
+  comenzar
+    repetir flores
+      depositarFlor
+  fin
+areas
+  areaTrabajo: AreaP(1, 1, 1, 100)
+robots
+  robot tipo1
+  variables
+    flores: numero
+    esquinaSinFlores: numero
+  comenzar
+    flores:= 0
+    esquinaSinFlores:= 0
+    juntarYMover(flores, esquinaSinFlores)
+    depositar(flores)
+    Informar(flores)
+    Informar(esquinaSinFlores)
+  fin
+variables
+  r1: tipo1
+comenzar
+  AsignarArea(r1, areaTrabajo)
+  Iniciar(r1, 1, 1)
+fin
