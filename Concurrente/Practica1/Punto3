@@ -1,0 +1,68 @@
+programa punto3
+procesos
+  proceso juntarElementos(ES flores: numero; ES papeles: numero)
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      flores:= flores + 1
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+      papeles:= papeles + 1
+  fin
+{----------------------------------------------------------------------------------------------------}
+  proceso moverYJuntar(E x: numero; ES flores: numero; ES papeles: numero; ES cantEscalones: numero)
+  comenzar
+    juntarElementos(flores, papeles)
+    repetir x
+      mover
+      juntarElementos(flores, papeles)
+    derecha
+    repetir x
+      mover
+      juntarElementos(flores, papeles)
+    repetir 3
+      derecha
+    escalones(cantEscalones, flores, papeles)
+  fin
+{----------------------------------------------------------------------------------------------------}
+  proceso escalones(ES cantEscalones: numero; E flores: numero; E papeles: numero)
+  comenzar
+    si((papeles - flores) = 1)
+      cantEscalones:= cantEscalones + 1
+      Informar('Papeles',papeles)
+      Informar('Flores', flores)
+      Informar('Escalon',cantEscalones)
+      
+  fin
+areas
+  areaTrabajo: AreaC(12, 6, 32, 24)
+robots
+  robot tipo1
+  variables
+    flores: numero
+    papeles: numero
+    x: numero
+    cantEscalones: numero
+  comenzar
+    cantEscalones:= 0
+    x:= 1
+    mientras(x <= 4)
+      flores:= 0
+      papeles:= 0
+      moverYJuntar(x, flores, papeles, cantEscalones)
+      x:= x + 1
+    Informar('Cantidad_de_escalones',cantEscalones)
+  fin
+variables
+  r1: tipo1
+  r2: tipo1
+  r3: tipo1
+comenzar
+  AsignarArea(r1, areaTrabajo)
+  AsignarArea(r2, areaTrabajo)
+  AsignarArea(r3, areaTrabajo)
+  Iniciar(r1, 22, 6)
+  Iniciar(r2, 17, 10)
+  Iniciar(r3, 12, 14)
+fin
+
