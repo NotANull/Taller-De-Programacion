@@ -1,0 +1,83 @@
+programa punto2
+procesos
+  proceso juntarPapeles(ES papeles: numero)
+  comenzar
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+      papeles:= papeles + 1
+  fin
+areas
+  areaTrabajo1: AreaP(10, 10, 10, 28)
+  areaTrabajo2: AreaP(10, 29, 29, 29)
+  areaTrabajo3: AreaP(29, 10, 29, 28)
+  areaTrabajo4: AreaP(11, 10, 28, 10)
+robots
+  robot tipo1
+  variables
+    papeles: numero
+  comenzar
+    papeles:= 0
+    juntarPapeles(papeles)
+    repetir 18
+      mover
+      juntarPapeles(papeles)
+    Informar('Cantidad_de_papeles_juntados_',papeles)
+  fin
+{-----------------------------------}
+  robot tipo2
+  variables
+    papeles: numero
+  comenzar
+    papeles:= 0
+    derecha
+    juntarPapeles(papeles)
+    repetir 19
+      mover
+      juntarPapeles(papeles)
+    Informar('Cantidad_de_papeles_juntados_',papeles)
+  fin
+{-----------------------------------}
+  robot tipo3
+  variables
+    papeles: numero
+  comenzar
+    papeles:= 0
+    repetir 2
+      derecha
+    juntarPapeles(papeles)
+    repetir 18
+      mover
+      juntarPapeles(papeles)
+    Informar('Cantidad_de_papeles_juntados_',papeles)
+  fin
+{-----------------------------------}
+  robot tipo4
+  variables
+    papeles: numero
+  comenzar
+    papeles:= 0
+    repetir 3
+      derecha
+    juntarPapeles(papeles)
+    repetir 17
+      mover
+      juntarPapeles(papeles)
+    Informar('Cantidad_de_papeles_juntados_',papeles)
+  fin
+variables
+  r1: tipo1
+  r2: tipo2
+  r3: tipo3
+  r4: tipo4
+comenzar
+  AsignarArea(r1, areaTrabajo1)
+  AsignarArea(r2, areaTrabajo2)
+  AsignarArea(r3, areaTrabajo3)
+  AsignarArea(r4, areaTrabajo4)
+  Iniciar(r1, 10, 10)
+  Iniciar(r2, 10, 29)
+  Iniciar(r3, 29, 28)
+  Iniciar(r4, 28, 10)
+fin
+{a- Las áreas deben declararse como privadas}
+{b- Existe riesgo de colisión si, en cada esquina que comparten los robots, un robot se queda juntando muchos elementos en su esquina}
