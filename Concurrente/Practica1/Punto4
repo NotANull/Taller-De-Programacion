@@ -1,0 +1,128 @@
+programa punto4
+procesos
+{--------------------PROCESOS GLOBALES--------------------}
+  proceso siguienteEsquina
+  comenzar
+    derecha
+    mover
+    derecha
+  fin
+{----------------------------------------}
+  proceso izquierda
+  comenzar
+    repetir 3
+      derecha
+  fin
+{--------------------PROCESOS PARA PAPELEROS--------------------}
+  proceso juntarPapeles(ES papeles: numero)
+  comenzar
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+      papeles:= papeles + 1
+  fin
+{----------------------------------------}
+  proceso juntarPapelesYMover(ES papeles: numero)
+  comenzar
+    juntarPapeles(papeles)
+    mover
+  fin
+{----------------------------------------}
+  proceso recorrerCallesAreasPares(ES papeles: numero)
+  comenzar
+    repetir 14{99}
+      juntarPapelesYMover(papeles)
+  fin
+{----------------------------------------}
+  proceso contemplarBordesPapeleros(ES papeles: numero)
+  comenzar
+    recorrerCallesAreasPares(papeles)
+    juntarPapeles(papeles)
+  fin
+{--------------------PROCESOS PARA FLOREROS--------------------}
+  proceso juntarFlores(ES flores: numero)
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      flores:= flores + 1
+  fin
+{----------------------------------------}
+  proceso juntarFloresYMover(ES flores: numero)
+  comenzar
+    juntarFlores(flores)
+    mover
+  fin
+{----------------------------------------}
+  proceso recorrerCallesAreasImpares(ES flores: numero)
+  comenzar
+    repetir 14{99}
+      juntarFloresYMover(flores)
+  fin
+{----------------------------------------}
+  proceso contemplarBordesFloreros(ES flores: numero)
+  comenzar
+    recorrerCallesAreasImpares(flores)
+    juntarFlores(flores)
+  fin
+{--------------------TRABAJO FLORERO--------------------}
+  proceso moverYJuntarAreasImpares(ES flores: numero)
+  comenzar
+    repetir 12 {Cantidad de veces que recorro una calle, me paso a la siguiente y vuelvo bajando}
+      contemplarBordesFloreros(flores) {Para procesar los bordes del límite del área}
+      siguienteEsquina {Cuando termino de recorrer una calle, me paso a la siguiente pra volver bajando (quedo mirando hacia abajo)}
+      contemplarBordesFloreros(flores)
+      izquierda
+      mover
+      izquierda
+    contemplarBordesFloreros(flores) {Última calle del límite derecho del área}
+  fin
+{--------------------TRABAJO PAPELERO--------------------}
+  proceso moverYJuntarAreasPares(ES papeles: numero)
+  comenzar
+    repetir 12
+      contemplarBordesPapeleros(papeles)
+      siguienteEsquina
+      contemplarBordesPapeleros(papeles)
+      izquierda
+      mover
+      izquierda
+    contemplarBordesPapeleros(papeles)
+  fin
+areas
+  area1: AreaP(1, 1, 25, 15){AreaP(1, 1, 25, 100)}
+  area2: AreaP(26, 1, 50, 15){AreaP(26, 1, 50, 100)}
+  area3: AreaP(51, 1, 75, 15){AreaP(51, 1, 75, 100)}
+  area4: AreaP(76, 1, 100, 15){AreaP(76, 1, 100, 100)}
+robots
+  robot tipoFlorero
+  variables
+    flores: numero
+  comenzar
+    flores:= 0
+    moverYJuntarAreasImpares(flores)
+    Pos(51, 1)
+    moverYJuntarAreasImpares(flores)
+  fin
+{----------------------------------------}
+  robot tipoPapelero
+  variables
+    papeles: numero
+  comenzar
+    papeles:= 0
+    moverYJuntarAreasPares(papeles)
+    Pos(76, 1)
+    moverYJuntarAreasPares(papeles)
+  fin
+{--------------------PROGRAMA PRINCIPAL--------------------}
+variables
+  florero: tipoFlorero
+  papelero: tipoPapelero
+comenzar
+  AsignarArea(florero, area1)
+  AsignarArea(florero, area3)
+  AsignarArea(papelero, area2)
+  AsignarArea(papelero, area4)
+  Iniciar(florero, 1, 1)
+  Iniciar(papelero, 26, 1)
+fin
+
+
