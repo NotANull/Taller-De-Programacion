@@ -1,0 +1,121 @@
+programa punto5
+
+procesos
+
+{--------------------PARA LOS FLOREROS--------------------}
+
+  proceso juntarFlores(ES flores: numero)
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      flores:= flores + 1
+  fin
+
+  proceso recorrerYJuntarFlores(ES flores: numero)
+  comenzar
+    repetir 19
+      juntarFlores(flores)
+      mover
+    juntarFlores(flores)
+  fin
+
+  proceso depositarFlores(E flores: numero)
+  comenzar
+    repetir flores
+      depositarFlor
+  fin
+
+{--------------------PARA LOS PAPELEROS--------------------}
+
+  proceso juntarPapeles(ES papeles: numero)
+  comenzar
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+      papeles:= papeles + 1
+  fin
+
+  proceso recorrerYJuntarPapeles(ES papeles: numero)
+  comenzar
+    repetir 19
+      juntarPapeles(papeles)
+      mover
+    juntarPapeles(papeles)
+  fin
+
+  proceso depositarPapeles(E papeles: numero)
+  comenzar
+    repetir papeles
+      depositarPapel
+  fin
+
+areas
+  area1A: AreaP(1, 75, 20, 75)
+  area1B: AreaP(1, 80, 20, 80)
+
+  area2A: AreaP(75, 80, 75, 99)
+  area2B: AreaP(80, 80, 80, 99)
+
+  area3A: AreaP(80, 15, 99, 15)
+  area3B: AreaP(80, 10, 99, 10)
+
+  area4A: AreaP(10, 1, 10, 20)
+  area4B: AreaP(15, 1, 15, 20)
+
+robots
+  robot tipoFlorero
+  variables
+    flores: numero
+    avActual: numero
+    caActual: numero
+  comenzar
+    flores:= 0
+    avActual:= PosAv
+    caActual:= PosCa
+    derecha
+    recorrerYJuntarFlores(flores)
+    Pos(avActual, caActual+5)
+    recorrerYJuntarFlores(flores)
+    depositarFlores(flores)
+  fin
+
+  robot tipoPapelero
+  variables
+    papeles: numero
+    avActual: numero
+    caActual: numero
+  comenzar
+    papeles:= 0
+    avActual:= PosAv
+    caActual:= PosCa
+    recorrerYJuntarPapeles(papeles)
+    Pos(avActual+5, caActual)
+    recorrerYJuntarPapeles(papeles)
+    Pos(avActual, caActual)
+    depositarPapeles(papeles)
+  fin
+
+variables
+  florero1: tipoFlorero
+  florero2: tipoFlorero
+  papelero1: tipoPapelero
+  papelero2: tipoPapelero
+
+comenzar
+  AsignarArea(florero1, area1A)
+  AsignarArea(florero1, area1B)
+
+  AsignarArea(florero2, area3A)
+  AsignarArea(florero2, area3B)
+
+  AsignarArea(papelero1, area2A)
+  AsignarArea(papelero1, area2B)
+
+  AsignarArea(papelero2, area4A)
+  AsignarArea(papelero2, area4B)
+
+  Iniciar(florero1, 1, 75)
+  Iniciar(florero2, 80, 10)
+  Iniciar(papelero1, 75, 80)
+  Iniciar(papelero2, 10, 1)
+
+fin
