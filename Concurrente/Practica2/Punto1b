@@ -1,0 +1,86 @@
+programa punto1
+procesos
+
+  proceso juntar(ES flores: numero)
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      flores:= flores + 1
+  fin
+
+  proceso moverYJuntar(ES flores: numero)
+  comenzar
+    repetir 9
+      juntar(flores)
+      mover
+    juntar(flores)
+  fin
+
+  proceso diferenciarEInformar(E floresRobot1: numero; E floresRobot2: numero)
+  variables
+    diferencia: numero
+  comenzar
+    si(floresRobot1 > floresRobot2)
+      diferencia:= floresRobot1 - floresRobot2
+      Informar('Robot_1_ganador_con_diferencia_de',diferencia)
+    sino
+      si(floresRobot2 > floresRobot1)
+        diferencia:= floresRobot2 - floresRobot1
+        Informar('Robot_2_ganador_con_diferencia_de',diferencia)
+      sino
+        Informar('Empate', 0)
+  fin
+
+areas
+
+  areaTrabajo1: AreaP(1, 1, 1, 10)
+  areaTrabajo2: AreaP(2, 11, 2, 20)
+  areaFiscalizador: AreaP(2, 1, 2, 1)
+
+robots
+
+  robot tipoFlorero
+  variables
+    flores: numero
+    quienSoy: numero
+  comenzar
+    RecibirMensaje(quienSoy, fiscal)
+    flores:= 0
+    moverYJuntar(flores)
+    EnviarMensaje(quienSoy, fiscal)
+    EnviarMensaje(flores, fiscal)
+  fin
+
+  robot tipoFiscalizador
+  variables
+    floresRobot1: numero
+    floresRobot2: numero
+    numRobot: numero
+  comenzar
+    EnviarMensaje(1, florero1)
+    EnviarMensaje(2, florero2)
+
+    repetir 2
+      RecibirMensaje(numRobot, *)
+      si(numRobot = 1)
+        RecibirMensaje(floresRobot1, florero1)
+      sino
+        RecibirMensaje(floresRobot2, florero2)
+
+    diferenciarEInformar(floresRobot1, floresRobot2)
+  fin
+
+variables
+  florero1: tipoFlorero
+  florero2: tipoFlorero
+  fiscal: tipoFiscalizador
+comenzar
+  AsignarArea(florero1, areaTrabajo1)
+  AsignarArea(florero2, areaTrabajo2)
+  AsignarArea(fiscal, areaFiscalizador)
+
+  Iniciar(florero1, 1, 1)
+  Iniciar(florero2, 2, 11)
+  Iniciar(fiscal, 2, 1)
+fin
+

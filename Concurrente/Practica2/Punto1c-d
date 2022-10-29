@@ -1,0 +1,131 @@
+programa punto1
+procesos
+
+  proceso juntar(ES flores: numero)
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      flores:= flores + 1
+  fin
+
+  proceso moverYJuntar(ES flores: numero)
+  comenzar
+    repetir 9
+      juntar(flores)
+      mover
+    juntar(flores)
+  fin
+
+  proceso quienGanador(E floresRobot: numero; E numRobot: numero; ES maxFlores: numero; ES robotGanador: numero)
+  comenzar
+    si(floresRobot > maxFlores)
+      maxFlores:= floresRobot
+      robotGanador:= numRobot
+  fin
+
+areas
+
+  areaTrabajo1: AreaP(1, 1, 1, 10)
+  areaTrabajo2: AreaP(2, 11, 2, 20)
+  areaTrabajo3: AreaP(3, 21, 3, 30)
+  areaTrabajo4: AreaP(4, 31, 4, 40)
+  areaTrabajo5: AreaP(5, 41, 5, 50)
+  areaTrabajo6: AreaP(6, 51, 6, 60)
+  areaFiscalizador: AreaP(2, 1, 2, 1)
+
+robots
+
+  robot tipoFlorero
+  variables
+    flores: numero
+    quienSoy: numero
+  comenzar
+    RecibirMensaje(quienSoy, fiscal)
+    flores:= 0
+    moverYJuntar(flores)
+    EnviarMensaje(quienSoy, fiscal)
+    EnviarMensaje(flores, fiscal)
+  fin
+
+  robot tipoFiscalizador
+  variables
+    floresRobot1: numero
+    floresRobot2: numero
+    floresRobot3: numero
+    floresRobot4: numero
+    floresRobot5: numero
+    floresRobot6: numero
+    maxFlores: numero
+    robotGanador: numero
+    numRobot: numero
+  comenzar
+
+    maxFlores:= -1
+    robotGanador:= -1
+
+    EnviarMensaje(1, florero1)
+    EnviarMensaje(2, florero2)
+    EnviarMensaje(3, florero3)
+    EnviarMensaje(4, florero4)
+    EnviarMensaje(5, florero5)
+    EnviarMensaje(6, florero6)
+
+    repetir 6
+      RecibirMensaje(numRobot, *)
+      si(numRobot = 1)
+        RecibirMensaje(floresRobot1, florero1)
+        quienGanador(floresRobot1, numRobot, maxFlores, robotGanador)
+      sino
+        si(numRobot = 2)
+          RecibirMensaje(floresRobot2, florero2)
+          quienGanador(floresRobot2, numRobot, maxFlores, robotGanador)
+        sino
+          si(numRobot = 3)
+            RecibirMensaje(floresRobot3, florero3)
+            quienGanador(floresRobot3, numRobot, maxFlores, robotGanador)
+          sino
+            si(numRobot = 4)
+              RecibirMensaje(floresRobot4, florero4)
+              quienGanador(floresRobot4, numRobot, maxFlores, robotGanador)
+            sino
+              si(numRobot = 5)
+                RecibirMensaje(floresRobot5, florero5)
+                quienGanador(floresRobot5, numRobot, maxFlores, robotGanador)
+              sino
+                RecibirMensaje(floresRobot6, florero6)
+                quienGanador(floresRobot6, numRobot, maxFlores, robotGanador)
+
+    Informar('El_ganador_fue_el_robot',robotGanador)
+    Informar('Flores_que_juntó_el_ganador',maxFlores)
+  fin
+
+variables
+
+  florero1: tipoFlorero
+  florero2: tipoFlorero
+  florero3: tipoFlorero
+  florero4: tipoFlorero
+  florero5: tipoFlorero
+  florero6: tipoFlorero
+  fiscal: tipoFiscalizador
+
+comenzar
+
+  AsignarArea(florero1, areaTrabajo1)
+  AsignarArea(florero2, areaTrabajo2)
+  AsignarArea(florero3, areaTrabajo3)
+  AsignarArea(florero4, areaTrabajo4)
+  AsignarArea(florero5, areaTrabajo5)
+  AsignarArea(florero6, areaTrabajo6)
+  AsignarArea(fiscal, areaFiscalizador)
+
+  Iniciar(florero1, 1, 1)
+  Iniciar(florero2, 2, 11)
+  Iniciar(florero3, 3, 21)
+  Iniciar(florero4, 4, 31)
+  Iniciar(florero5, 5, 41)
+  Iniciar(florero6, 6, 51)
+  Iniciar(fiscal, 2, 1)
+fin
+
+

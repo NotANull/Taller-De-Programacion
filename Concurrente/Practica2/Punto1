@@ -1,0 +1,70 @@
+programa punto1
+procesos
+
+  proceso juntar(ES flores: numero)
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      flores:= flores + 1
+  fin
+
+  proceso moverYJuntar(ES flores: numero)
+  comenzar
+    repetir 9
+      juntar(flores)
+      mover
+    juntar(flores)
+  fin
+
+  proceso diferenciarEInformar(E flores: numero; E floresContrincante: numero)
+  variables
+  	diferencia: numero
+  comenzar
+  	si(flores > floresContrincante)
+    	diferencia:= flores - floresContrincante
+    	Informar('Diferencia_de',diferencia)
+    sino
+    	si(flores = floresContrincante)
+    		Informar('Empate', flores)
+  fin
+
+areas
+  areaTrabajo1: AreaP(1, 1, 1, 10)
+  areaTrabajo2: AreaP(2, 11, 2, 20)
+robots
+
+  robot tipoFlorero1
+  variables
+    flores: numero
+    floresContrincante: numero
+  comenzar
+    flores:= 0
+    moverYJuntar(flores)
+    EnviarMensaje(flores, florero2)
+    RecibirMensaje(floresContrincante, florero2)
+    diferenciarEInformar(flores, floresContrincante)
+  fin
+
+  robot tipoFlorero2
+  variables
+    flores: numero
+    floresContrincante: numero
+  comenzar
+    flores:= 0
+    moverYJuntar(flores)
+    EnviarMensaje(flores, florero1)
+    RecibirMensaje(floresContrincante, florero1)
+    diferenciarEInformar(flores, floresContrincante)
+  fin
+
+variables
+  florero1: tipoFlorero1
+  florero2: tipoFlorero2
+comenzar
+  AsignarArea(florero1, areaTrabajo1)
+  AsignarArea(florero2, areaTrabajo2)
+
+  Iniciar(florero1, 1, 1)
+  Iniciar(florero2, 2, 11)
+fin
+
