@@ -1,0 +1,122 @@
+programa punto3
+
+procesos
+
+  proceso procesarEscalones(ES cantEscalones: numero; E flores: numero; E papeles: numero)
+  comenzar
+    si(flores > papeles)
+      cantEscalones:= cantEscalones + 1
+      Informar('flores', flores) {Sólo para verificar, no lo pide el enunciado}
+      Informar('papeles', papeles) {Sólo para verificar, no lo pide el enunciado}
+      Informar('Escalón_con_mas_flores', cantEscalones) {Sólo para verificar, no lo pide el enunciado}
+  fin
+
+
+  proceso juntarElementos(ES flores: numero; ES papeles: numero)
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      flores:= flores + 1
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+      papeles:= papeles + 1
+  fin
+
+  proceso moverYJuntar(ES flores: numero; ES papeles: numero; ES cantEscalones: numero)
+  variables
+    alturaRandom: numero
+  comenzar
+    Random(alturaRandom, 1, 5)
+    juntarElementos(flores, papeles)
+    repetir alturaRandom
+      mover
+      juntarElementos(flores, papeles)
+    derecha
+    mover
+    juntarElementos(flores, papeles)
+    repetir 3
+      derecha
+    procesarEscalones(cantEscalones, flores, papeles)
+  fin
+
+  proceso trabajar(ES cantEscalones: numero)
+  variables
+    flores: numero
+    papeles: numero
+  comenzar
+    repetir 4
+      flores:= 0
+      papeles:= 0
+      moverYJuntar(flores, papeles, cantEscalones)
+  fin
+
+areas
+
+  areaTrabajo1: AreaP(2, 1, 6, 20)
+  areaTrabajo2: AreaP(7, 1, 11, 20)
+  areaTrabajo3: AreaP(12, 1, 16, 20)
+  areaJefe: AreaP(1, 1, 1, 1)
+
+robots
+
+  robot tipoTrabajador
+  variables
+    cantEscalones: numero
+    quienSoy: numero
+  comenzar
+    RecibirMensaje(quienSoy, jefe)
+    cantEscalones:= 0
+    trabajar(cantEscalones)
+    EnviarMensaje(quienSoy, jefe)
+    EnviarMensaje(cantEscalones, jefe)
+  fin
+
+  robot tipoJefe
+  variables
+    escalonesTrabajador1: numero
+    escalonesTrabajador2: numero
+    escalonesTrabajador3: numero
+    totalEscalones: numero
+    numRobot: numero
+  comenzar
+    totalEscalones:= 0
+
+    EnviarMensaje(1, trabajador1)
+    EnviarMensaje(2, trabajador2)
+    EnviarMensaje(3, trabajador3)
+
+    repetir 3
+      RecibirMensaje(numRobot, *)
+      si(numRobot = 1)
+        RecibirMensaje(escalonesTrabajador1, trabajador1)
+        totalEscalones:= totalEscalones + escalonesTrabajador1
+      sino
+        si(numRobot = 2)
+          RecibirMensaje(escalonesTrabajador2, trabajador2)
+          totalEscalones:= totalEscalones + escalonesTrabajador2
+        sino
+          RecibirMensaje(escalonesTrabajador3, trabajador3)
+          totalEscalones:= totalEscalones + escalonesTrabajador3
+
+    Informar('Total_de_escalones_por_los_3_robots', totalEscalones)
+  fin
+
+variables
+
+  trabajador1: tipoTrabajador
+  trabajador2: tipoTrabajador
+  trabajador3: tipoTrabajador
+  jefe: tipoJefe
+
+comenzar
+
+  AsignarArea(trabajador1, areaTrabajo1)
+  AsignarArea(trabajador2, areaTrabajo2)
+  AsignarArea(trabajador3, areaTrabajo3)
+  AsignarArea(jefe, areaJefe)
+
+  Iniciar(trabajador1, 2, 1)
+  Iniciar(trabajador2, 7, 1)
+  Iniciar(trabajador3, 12, 1)
+  Iniciar(jefe, 1, 1)
+fin
