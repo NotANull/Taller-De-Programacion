@@ -1,0 +1,90 @@
+programa punto3
+
+procesos
+
+  proceso juntarElemento(ES elemento: numero; E hayFlor: boolean)
+  comenzar
+    si(hayFlor)
+      mientras(HayFlorEnLaEsquina)
+        tomarFlor
+        elemento:= elemento + 1
+    sino
+      mientras(HayPapelEnLaEsquina)
+        tomarPapel
+        elemento:= elemento + 1
+  fin
+
+  proceso moverYJuntar(ES elemento: numero; E hayFlor: boolean)
+  comenzar
+    derecha
+    repetir 9
+      juntarElemento(elemento, hayFlor)
+      mover
+    juntarElemento(elemento, hayFlor)
+  fin
+
+areas
+
+  areaA: AreaPC(1, 1, 20, 1)
+  areaB: AreaPC(1, 5, 20, 5)
+
+robots
+
+  robot tipoRecolectorPapelero
+  variables
+    papeles: numero
+  comenzar
+    papeles:= 0
+    moverYJuntar(papeles, F)
+    EnviarMensaje(papeles, robotA2)
+  fin
+
+  robot tipoInformePapelero
+  variables
+    papeles: numero
+  comenzar
+    RecibirMensaje(papeles, robotA1)
+    moverYJuntar(papeles, F)
+    Informar('Cantidad_de_papeles_juntados_por_el_equipo_A', papeles)
+  fin
+
+  robot tipoRecolectorFlorero
+  variables
+    flores: numero
+  comenzar
+    flores:= 0
+    moverYJuntar(flores, V)
+    EnviarMensaje(flores, robotB2)
+  fin
+
+  robot tipoInformeFlorero
+  variables
+    flores: numero
+  comenzar
+    RecibirMensaje(flores, robotB1)
+    moverYJuntar(flores, V)
+    Informar('Cantidad_de_flores_juntadas_por_el_equipo_B', flores)
+  fin
+
+variables
+
+  robotA1: tipoRecolectorPapelero
+  robotB1: tipoRecolectorFlorero
+  robotA2: tipoInformePapelero
+  robotB2: tipoInformeFlorero
+
+comenzar
+
+  AsignarArea(robotA1, areaA)
+  AsignarArea(robotA2, areaA)
+  AsignarArea(robotB1, areaB)
+  AsignarArea(robotB2, areaB)
+
+  Iniciar(robotA1, 1, 1)
+  Iniciar(robotA2, 11, 1)
+  Iniciar(robotB1, 1, 5)
+  Iniciar(robotB2, 11, 5)
+
+fin
+
+
