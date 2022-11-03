@@ -1,0 +1,154 @@
+programa punto4
+
+procesos
+
+  proceso procesarMaximo(ES totalMax: numero; ES rGanador: numero; E totalRobot: numero; E nRobot: numero)
+  comenzar
+    si(totalRobot > totalMax)
+      totalMax:= totalRobot
+      rGanador:= nRobot
+  fin
+
+  proceso limpiar(ES flores: numero; ES papeles: numero)
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      flores:= flores + 1
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+      papeles:= papeles + 1
+  fin
+
+  proceso ElegirRobot
+  variables
+    robotRandom: numero
+  comenzar
+    Random(robotRandom, 1, 4)
+    si(robotRandom = 1)
+      EnviarMensaje(V, r1)
+    sino
+      si(robotRandom = 2)
+        EnviarMensaje(V, r2)
+      sino
+        si(robotRandom = 3)
+          EnviarMensaje(V, r3)
+        sino
+          EnviarMensaje(V, r4)
+  fin
+
+
+
+areas
+
+  areaCuadrante: AreaPC(25, 25, 75, 75)
+  areaFiscal: AreaP(1, 1, 1, 1)
+  areaR1: AreaP(25, 1, 25, 1)
+  areaR2: AreaP(30, 1, 30, 1)
+  areaR3: AreaP(35, 1, 35, 1)
+  areaR4: AreaP(40, 1, 40, 1)
+
+robots
+
+  robot tipoRecolector
+  variables
+    elegido: boolean
+    quienSoy: numero
+    avActual: numero
+    caActual: numero
+    avRandom: numero
+    caRandom: numero
+    flores: numero
+    papeles: numero
+    totalElementos: numero
+    soyGanador: numero
+  comenzar
+    avActual:= PosAv
+    caActual:= PosCa
+    flores:= 0
+    papeles:= 0
+    RecibirMensaje(quienSoy, fiscal)
+    RecibirMensaje(elegido, fiscal)
+    mientras(elegido)
+      Random(avRandom, 25, 75)
+      Random(caRandom, 25, 75)
+      Pos(avRandom, caRandom)
+      limpiar(flores, papeles)
+      Pos(avActual, caActual)
+      EnviarMensaje(elegido,fiscal)
+      RecibirMensaje(elegido, fiscal)
+    totalElementos:= flores + papeles
+    EnviarMensaje(quienSoy, fiscal)
+    EnviarMensaje(totalElementos, fiscal)
+    RecibirMensaje(soyGanador, fiscal)
+    si(soyGanador = quienSoy)
+      Pos(50, 50)
+  fin
+
+  robot tipoFiscalizador
+  variables
+    robotRandom: numero
+    permiso: boolean
+    numRobot: numero
+    total: numero
+    totalMax: numero
+    rGanador: numero
+  comenzar
+
+    totalMax:= -1
+    rGanador:= -1
+
+    EnviarMensaje(1, r1)
+    EnviarMensaje(2, r2)
+    EnviarMensaje(3, r3)
+    EnviarMensaje(4, r4)
+
+    repetir 10
+      ElegirRobot
+      RecibirMensaje(permiso,*)
+
+    EnviarMensaje(F, r1)
+    EnviarMensaje(F, r2)
+    EnviarMensaje(F, r3)
+    EnviarMensaje(F, r4)
+
+    repetir 4
+      RecibirMensaje(numRobot, *)
+      RecibirMensaje(total, *)
+      procesarMaximo(totalMax, rGanador, total, numRobot)
+
+    EnviarMensaje(rGanador, r1)
+    EnviarMensaje(rGanador, r2)
+    EnviarMensaje(rGanador, r3)
+    EnviarMensaje(rGanador, r4)
+
+  fin
+
+variables
+
+  r1: tipoRecolector
+  r2: tipoRecolector
+  r3: tipoRecolector
+  r4: tipoRecolector
+  fiscal: tipoFiscalizador
+
+comenzar
+
+  AsignarArea(r1, areaCuadrante)
+  AsignarArea(r2, areaCuadrante)
+  AsignarArea(r3, areaCuadrante)
+  AsignarArea(r4, areaCuadrante)
+
+  AsignarArea(r1, areaR1)
+  AsignarArea(r2, areaR2)
+  AsignarArea(r3, areaR3)
+  AsignarArea(r4, areaR4)
+  AsignarArea(fiscal, areaFiscal)
+
+  Iniciar(r1, 25, 1)
+  Iniciar(r2, 30, 1)
+  Iniciar(r3, 35, 1)
+  Iniciar(r4, 40, 1)
+  Iniciar(fiscal, 1, 1)
+
+fin
+
