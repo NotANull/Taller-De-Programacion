@@ -1,0 +1,126 @@
+programa punto1
+
+procesos
+
+  proceso juntar(ES elemento: numero; E floreros: boolean)
+  comenzar
+    si(floreros)
+      mientras(HayFlorEnLaEsquina)
+        tomarFlor
+        elemento:= elemento + 1
+    sino
+      mientras(HayPapelEnLaEsquina)
+        tomarPapel
+        elemento:= elemento + 1
+  fin
+
+  proceso posicionarse(ES elemento: numero; E floreros: boolean; E avActual: numero; E caActual: numero)
+  variables
+    avRandom: numero
+    caRandom: numero
+  comenzar
+    si(floreros)
+      Random(avRandom, 1, 5)
+      Random(caRandom, 1, 10)
+      BloquearEsquina(avRandom, caRandom)
+      Pos(avRandom, caRandom)
+      juntar(elemento, floreros)
+      Pos(avActual, caActual)
+      LiberarEsquina(avRandom, caRandom)
+    sino
+      Random(avRandom, 6, 10)
+      Random(caRandom, 1, 9)
+      BloquearEsquina(avRandom, caRandom)
+      Pos(avRandom, caRandom)
+      juntar(elemento, floreros)
+      Pos(avActual, caActual)
+      LiberarEsquina(avRandom, caRandom)
+  fin
+
+  proceso depositar(E floreros: boolean; E avActual: numero; E caActual: numero)
+  comenzar
+    si(floreros)
+      BloquearEsquina(10, 10)
+      Pos(10, 10)
+      depositarFlor
+      Pos(avActual, caActual)
+      LiberarEsquina(10, 10)
+    sino
+      BloquearEsquina(10, 10)
+      Pos(10, 10)
+      depositarPapel
+      Pos(avActual, caActual)
+      LiberarEsquina(10, 10)
+  fin
+
+areas
+
+  areaFloreros: AreaPC(1, 1, 5, 10)
+  areaPapeleros: AreaPC(6, 1, 10, 9)
+  areaF1: AreaP(6, 10, 6, 10)
+  areaF2: AreaP(7, 10, 7, 10)
+  areaP1: AreaP(8, 10, 8, 10)
+  areaP2: AreaP(9, 10, 9, 10)
+  areaDeposito: AreaC(10, 10, 10, 10)
+
+robots
+
+  robot tipoFlorero
+  variables
+    flores: numero
+    avActual: numero
+    caActual: numero
+  comenzar
+    flores:= 0
+    avActual:= PosAv
+    caActual:= PosCa
+    repetir 5
+      posicionarse(flores, V, avActual, caActual)
+    repetir flores
+      depositar(V, avActual, caActual)
+  fin
+
+  robot tipoPapelero
+  variables
+    papeles: numero
+    avActual: numero
+    caActual: numero
+  comenzar
+    papeles:= 0
+    avActual:= PosAv
+    caActual:= PosCa
+    repetir 3
+      posicionarse(papeles, F, avActual, caActual)
+    repetir papeles
+      depositar(F, avActual, caActual)
+  fin
+
+variables
+
+  f1: tipoFlorero
+  f2: tipoFlorero
+  p1: tipoPapelero
+  p2: tipoPapelero
+
+comenzar
+
+  AsignarArea(f1, areaFloreros)
+  AsignarArea(f1, areaDeposito)
+  AsignarArea(f1, areaF1)
+  AsignarArea(f2, areaFloreros)
+  AsignarArea(f2, areaDeposito)
+  AsignarArea(f2, areaF2)
+
+  AsignarArea(p1, areaPapeleros)
+  AsignarArea(p1, areaDeposito)
+  AsignarArea(p1, areaP1)
+  AsignarArea(p2, areaPapeleros)
+  AsignarArea(p2, areaDeposito)
+  AsignarArea(p2, areaP2)
+
+  Iniciar(f1, 6, 10)
+  Iniciar(f2, 7, 10)
+  Iniciar(p1, 8, 10)
+  Iniciar(p2, 9, 10)
+
+fin
