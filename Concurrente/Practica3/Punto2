@@ -1,0 +1,178 @@
+programa punto2
+
+procesos
+
+	proceso bloquearYLiberar(ES elemento: numero; E florero: boolean; E quienSoy: numero)
+	comenzar
+		si(florero)
+			mover
+			derecha
+			BloquearEsquina(PosAv + 1, PosCa)
+			mover
+			EnviarMensaje(quienSoy, jefe)
+			juntar(elemento, florero)
+			repetir 2
+				derecha
+			mover
+			LiberarEsquina(PosAv + 1, PosCa)
+		sino
+			mover
+			izquierda
+			BloquearEsquina(PosAv - 1, PosCa)
+			mover
+			EnviarMensaje(quienSoy, jefe)
+			juntar(elemento, florero)
+			repetir 2
+				derecha
+			mover
+			LiberarEsquina(PosAv - 1, PosCa)
+	fin
+
+	proceso izquierda
+	comenzar
+		repetir 3
+			derecha
+	fin
+
+	proceso juntar(ES elemento: numero; E florero: boolean)
+	comenzar
+		si(florero)
+			mientras(HayFlorEnLaEsquina)
+				tomarFlor
+				elemento:= elemento + 1
+		sino
+			mientras(HayPapelEnLaEsquina)
+				tomarPapel
+				elemento:= elemento + 1
+	fin
+
+	proceso trabajar(ES elemento: numero; E florero: boolean; E quienSoy: numero)
+	variables
+		x: numero
+	comenzar
+		{--------------------IDA FLORERO--------------------}
+		x:= 5
+		si(florero)
+			mientras(x > 1)
+				repetir x {probar sin el mientras y decrementando x}
+					mover
+				derecha
+				repetir x
+					mover
+				juntar(elemento, florero)
+				izquierda
+				x:= x - 1
+			bloquearYLiberar(elemento, florero, quienSoy)
+			{--------------------VUELTA FLORERO--------------------}
+			x:= 2
+			mientras(x < 6)
+				repetir x
+					mover
+				juntar(elemento, florero)
+				derecha
+				repetir x
+					mover
+				izquierda
+				x:= x + 1
+		sino
+			{--------------------IDA PAPELERO--------------------}
+			mientras(x > 1)
+				repetir x
+					mover
+				izquierda
+				repetir x
+					mover
+				juntar(elemento, florero)
+				derecha
+				x:= x - 1
+			bloquearYLiberar(elemento, florero, quienSoy)
+			{--------------------VUELTA PAPELERO--------------------}
+			x:= 2
+			mientras(x < 6)
+				repetir x
+					mover
+				juntar(elemento, florero)
+				izquierda
+				repetir x
+					mover
+				derecha
+				x:= x + 1
+	fin
+
+areas
+
+	areaFlorero: AreaP(1, 1, 15, 30)
+	areaPapelero: AreaP(17, 1, 31, 30)
+	areaMeta: AreaPC(16, 16, 16, 16)
+	areaJefe: AreaP(16, 1, 16, 1)
+
+robots
+
+	robot tipoFlorero
+	variables
+		flores: numero
+		quienSoy: numero
+	comenzar
+		RecibirMensaje(quienSoy, jefe)
+		flores:= 0
+		trabajar(flores, V, quienSoy)
+		Informar('Cantidad_de_flores_juntadas',flores)
+		EnviarMensaje(quienSoy, jefe)
+		EnviarMensaje(V, jefe)
+	fin
+
+	robot tipoPapelero
+	variables
+		papeles: numero
+		quienSoy: numero
+	comenzar
+		RecibirMensaje(quienSoy, jefe)
+		papeles:= 0
+		trabajar(papeles, F, quienSoy)
+		Informar('Cantidad_de_papeles_juntados',papeles)
+		EnviarMensaje(quienSoy, jefe)
+		EnviarMensaje(V, jefe)
+	fin
+
+	robot tipoJefe
+	variables
+		numRobot: numero
+		ganador: numero
+		finalizado: boolean
+	comenzar
+
+		EnviarMensaje(1, florero)
+		EnviarMensaje(2, papelero)
+
+		RecibirMensaje(ganador, *)
+
+		repetir 2
+			RecibirMensaje(numRobot, *)
+			si(numRobot = 1)
+				RecibirMensaje(finalizado, florero)
+			sino
+				RecibirMensaje(finalizado, papelero)
+
+		Informar('Robot_ganador', ganador)
+
+	fin
+
+variables
+
+	florero: tipoFlorero
+	papelero: tipoPapelero
+	jefe: tipoJefe
+
+comenzar
+
+	AsignarArea(florero, areaFlorero)
+	AsignarArea(florero, areaMeta)
+	AsignarArea(papelero, areaPapelero)
+	AsignarArea(papelero, areaMeta)
+	AsignarArea(jefe, areaJefe)
+
+	Iniciar(florero, 1, 1)
+	Iniciar(papelero, 31, 1)
+	Iniciar(jefe, 16, 1)
+
+fin
