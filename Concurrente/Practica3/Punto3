@@ -1,0 +1,146 @@
+programa punto3
+
+procesos
+
+	proceso procesarRobotMax(ES floresMax: numero; ES robotMax: numero; E flores: numero; E nRobot: numero)
+	comenzar
+		si(flores > floresMax)
+			floresMax:= flores
+			robotMax:= nRobot
+	fin
+
+	proceso posicionarseYJuntar(ES flores: numero; E avRandom: numero; E caRandom: numero; E avActual: numero; E caActual: numero)
+	variables
+		ok: boolean
+	comenzar
+		ok:= V
+		mientras(ok)
+			BloquearEsquina(avRandom, caRandom)
+			Pos(avRandom, caRandom)
+			si(HayFlorEnLaEsquina)
+				tomarFlor
+				flores:= flores + 1
+			sino
+				ok:= F
+			Pos(avActual, caActual)
+			LiberarEsquina(avRandom, caRandom)
+	fin
+
+areas
+
+	areaTrabajo: AreaPC(2, 2, 10, 10)
+	areaJefe: AreaP(1, 1, 1, 1)
+	areaR1: AreaP(2, 1, 2, 1)
+	areaR2: AreaP(3, 1, 3, 1)
+	areaR3: AreaP(4, 1, 4, 1)
+	areaR4: AreaP(5, 1, 5, 1)
+
+robots
+
+	robot tipoRecolector
+	variables
+		quienSoy: numero
+		avRandom: numero
+		caRandom: numero
+		flores: numero
+		avActual: numero
+		caActual: numero
+	comenzar
+		RecibirMensaje(quienSoy, rJefe)
+		RecibirMensaje(avRandom, rJefe)
+		RecibirMensaje(caRandom, rJefe)
+		flores:= 0
+		avActual:= PosAv
+		caActual:= PosCa
+		posicionarseYJuntar(flores, avRandom, caRandom, avActual, caActual)
+		EnviarMensaje(quienSoy, rJefe)
+		EnviarMensaje(flores, rJefe)
+
+	fin
+
+	robot tipoJefe
+	variables
+		avRandom: numero
+		caRandom: numero
+		numRobot: numero
+		floresR: numero
+		floresMax: numero
+		robotMax: numero
+	comenzar
+
+		floresMax:= 0
+		robotMax:= -1
+
+		EnviarMensaje(1, r1)
+		EnviarMensaje(2, r2)
+		EnviarMensaje(3, r3)
+		EnviarMensaje(4, r4)
+
+		Random(avRandom, 2, 10)
+		Random(caRandom, 2, 10)
+
+		EnviarMensaje(5, r1)
+		EnviarMensaje(5, r1)
+		EnviarMensaje(5, r2)
+		EnviarMensaje(5, r2)
+		EnviarMensaje(5, r3)
+		EnviarMensaje(5, r3)
+		EnviarMensaje(5, r4)
+		EnviarMensaje(5, r4)
+
+		repetir 4
+			RecibirMensaje(numRobot, *)
+			si(numRobot = 1)
+				RecibirMensaje(floresR, r1)
+				procesarRobotMax(floresMax, robotMax, floresR, numRobot)
+			sino
+				si(numRobot = 2)
+					RecibirMensaje(floresR, r2)
+					procesarRobotMax(floresMax, robotMax, floresR, numRobot)
+				sino
+					si(numRobot = 3)
+						RecibirMensaje(floresR, r3)
+						procesarRobotMax(floresMax, robotMax, floresR, numRobot)
+					sino
+						RecibirMensaje(floresR, r4)
+						procesarRobotMax(floresMax, robotMax, floresR, numRobot)
+
+		si(robotMax > 0)
+			Informar('Robot_que_juntó_más_flores',robotMax)
+			Informar('Cantidad_de_flores_que_juntó',floresMax)
+		sino
+			Informar('Ningún_robot_juntó_flores',-1)
+
+	fin
+
+variables
+
+	r1: tipoRecolector
+	r2: tipoRecolector
+	r3: tipoRecolector
+	r4: tipoRecolector
+	rJefe: tipoJefe
+
+comenzar
+
+	AsignarArea(r1, areaTrabajo)
+	AsignarArea(r1, areaR1)
+
+	AsignarArea(r2, areaTrabajo)
+	AsignarArea(r2, areaR2)
+
+	AsignarArea(r3, areaTrabajo)
+	AsignarArea(r3, areaR3)
+
+	AsignarArea(r4, areaTrabajo)
+	AsignarArea(r4, areaR4)
+
+	AsignarArea(rJefe, areaJefe)
+
+	Iniciar(r1, 2, 1)
+	Iniciar(r2, 3, 1)
+	Iniciar(r3, 4, 1)
+	Iniciar(r4, 5, 1)
+	Iniciar(rJefe, 1, 1)
+
+fin
