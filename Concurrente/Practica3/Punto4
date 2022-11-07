@@ -1,0 +1,120 @@
+programa punto4
+
+procesos
+
+	proceso trabajar
+	variables
+		avActual: numero
+		caActual: numero
+		ok: boolean
+	comenzar
+		avActual:= PosAv
+		caActual:= PosCa
+		ok:= V
+		mientras(ok)
+			BloquearEsquina(10, 10)
+			Pos(10, 10)
+			si(HayFlorEnLaEsquina)
+				tomarFlor
+				BloquearEsquina(11, 11)
+				Pos(11, 11)
+				LiberarEsquina(10, 10)
+				si(HayFlorEnLaBolsa)
+					depositarFlor
+				Pos(avActual, caActual)
+				LiberarEsquina(11, 11)
+			sino
+				ok:= F
+				Pos(avActual, caActual)
+				LiberarEsquina(10, 10)
+			
+
+	fin
+
+	proceso posYJuntarCoordinador(ES flores: numero)
+	comenzar
+		Pos(11, 11)
+		mientras(HayFlorEnLaEsquina)
+			tomarFlor
+			flores:= flores + 1
+	fin
+
+areas
+
+	areaJuntar: AreaPC(10, 10, 10, 10)
+	areaDeposito: AreaC(11, 11, 11, 11)
+	areaCoordinador: AreaP(1, 1, 1, 1)
+	areaR1: AreaP(9, 9, 9, 9)
+	areaR2: AreaP(9, 10, 9, 10)
+	areaR3: AreaP(9, 11, 9, 11)
+	areaR4: AreaP(9, 12, 9, 12)
+
+robots
+
+	robot tipoTrabajador
+	variables
+		quienSoy: numero
+	comenzar
+		RecibirMensaje(quienSoy, coordinador)
+		trabajar
+		EnviarMensaje(quienSoy, coordinador)
+	fin
+
+	robot tipoCoordinador
+	variables
+		numRobot: numero
+		flores: numero
+	comenzar
+
+		flores:= 0
+
+		EnviarMensaje(1, r1)
+		EnviarMensaje(2, r2)
+		EnviarMensaje(3, r3)
+		EnviarMensaje(4, r4)
+
+		repetir 4
+			RecibirMensaje(numRobot, *)
+
+		Informar('Último_robot_en_terminar',numRobot)
+
+		posYJuntarCoordinador(flores)
+
+	fin
+
+variables
+
+	r1: tipoTrabajador
+	r2: tipoTrabajador
+	r3: tipoTrabajador
+	r4: tipoTrabajador
+	coordinador: tipoCoordinador
+
+comenzar
+
+	AsignarArea(r1, areaJuntar)
+	AsignarArea(r1, areaDeposito)
+	AsignarArea(r1, areaR1)
+
+	AsignarArea(r2, areaJuntar)
+	AsignarArea(r2, areaDeposito)
+	AsignarArea(r2, areaR2)
+
+	AsignarArea(r3, areaJuntar)
+	AsignarArea(r3, areaDeposito)
+	AsignarArea(r3, areaR3)
+
+	AsignarArea(r4, areaJuntar)
+	AsignarArea(r4, areaDeposito)
+	AsignarArea(r4, areaR4)
+
+	AsignarArea(coordinador, areaDeposito)
+	AsignarArea(coordinador, areaCoordinador)
+
+	Iniciar(r1, 9, 9)
+	Iniciar(r2, 9, 10)
+	Iniciar(r3, 9, 11)
+	Iniciar(r4, 9, 12)
+	Iniciar(coordinador, 1, 1)
+
+fin
