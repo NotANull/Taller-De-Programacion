@@ -1,0 +1,128 @@
+programa punto5
+
+procesos
+
+  proceso correr(ES distancia: numero)
+  variables
+    avActual: numero
+    caActual: numero
+    ok: boolean
+  comenzar
+    avActual:= PosAv {Me guardo la avenida y la calle en donde estoy parado inicialmente}
+    caActual:= PosCa
+    ok:= V
+    mientras(ok)
+      BloquearEsquina(11, 11) {Bloqueo la calle antes de ir a la esquina}
+      Pos(11, 11) {Me posiciono en la esquina}
+      si(HayPapelEnLaEsquina)
+        tomarPapel
+        Pos(avActual, caActual) {Una vez terminado de ir a buscar el papel, salgo de la esquina}
+        LiberarEsquina(11, 11) {Libero la esquina bloqueada para que otro robot pueda entrar}
+        depositarPapel {Deposito el papel en la posición que estaba}
+        mover
+        distancia:= PosCa {Me guardo la calle en la que estoy parado }
+        avActual:= PosAv {Vuelvo a guardar la posición en donde estaba parado }
+        caActual:= PosCa
+      sino
+        ok:= F
+        Pos(avActual, caActual)
+        LiberarEsquina(11, 11)
+  fin
+
+  proceso procesarDistancia(ES distanciaMax: numero; ES robotMax: numero; E distancia: numero; E nRobot: numero)
+  comenzar
+    si(distancia > distanciaMax)
+      distanciaMax:= distancia
+      robotMax:= nRobot
+  fin
+
+areas
+
+  areaFuente: AreaPC(11, 11, 11, 11)
+  areaR1: AreaP(4, 1, 4, 100)
+  areaR2: AreaP(6, 1, 6, 100)
+  areaR3: AreaP(8, 1, 8, 100)
+  areaR4: AreaP(10, 1, 10, 100)
+  areaCoordinador: AreaP(2, 1, 2, 1)
+
+robots
+
+  robot tipoRecolector
+  variables
+    quienSoy: numero
+    distancia: numero
+  comenzar
+    RecibirMensaje(quienSoy, rCoordinador)
+    distancia:= 0
+    correr(distancia)
+    EnviarMensaje(quienSoy, rCoordinador)
+    EnviarMensaje(distancia, rCoordinador)
+  fin
+
+  robot tipoCoordinador
+  variables
+    numRobot: numero
+    distanciaMax: numero
+    robotMax: numero
+    distancia: numero
+  comenzar
+    EnviarMensaje(1, r1)
+    EnviarMensaje(2, r2)
+    EnviarMensaje(3, r3)
+    EnviarMensaje(4, r4)
+
+    distanciaMax:= -1
+    robotMax:= -1
+
+    repetir 4
+      RecibirMensaje(numRobot, *)
+      si(numRobot = 1)
+        RecibirMensaje(distancia, r1)
+        procesarDistancia(distanciaMax, robotMax, distancia, numRobot)
+      sino
+        si(numRobot = 2)
+          RecibirMensaje(distancia, r2)
+          procesarDistancia(distanciaMax, robotMax, distancia, numRobot)
+        sino
+          si(numRobot = 3)
+            RecibirMensaje(distancia, r3)
+            procesarDistancia(distanciaMax, robotMax, distancia, numRobot)
+          sino
+            RecibirMensaje(distancia, r4)
+            procesarDistancia(distanciaMax, robotMax, distancia, numRobot)
+
+    Informar('Robot_que_llegó_más_lejos',robotMax)
+
+  fin
+
+variables
+
+  r1: tipoRecolector
+  r2: tipoRecolector
+  r3: tipoRecolector
+  r4: tipoRecolector
+  rCoordinador: tipoCoordinador
+
+comenzar
+
+  AsignarArea(r1, areaR1)
+  AsignarArea(r1, areaFuente)
+
+  AsignarArea(r2, areaR2)
+  AsignarArea(r2, areaFuente)
+
+  AsignarArea(r3, areaR3)
+  AsignarArea(r3, areaFuente)
+
+  AsignarArea(r4, areaR4)
+  AsignarArea(r4, areaFuente)
+
+  AsignarArea(rCoordinador, areaCoordinador)
+
+  Iniciar(r1, 4, 1)
+  Iniciar(r2, 6, 1)
+  Iniciar(r3, 8, 1)
+  Iniciar(r4, 10, 1)
+  Iniciar(rCoordinador, 2, 1)
+
+fin
