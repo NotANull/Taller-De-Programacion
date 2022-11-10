@@ -8,7 +8,7 @@ procesos
 		repetir 2
 			derecha
 		si((flor = V) & (papel = V))
-			mientras((papeles > 0) | (flores > 0))
+			mientras((PosAv < 100) & (papeles > 0) | (flores > 0))
 				si(papeles > 0)
 					depositarPapel
 					papeles:= papeles - 1
@@ -18,13 +18,17 @@ procesos
 				mover
 		sino
 			si((flor = V) & (papel = F))
-				repetir flores
-					depositarFlor
+				mientras((PosAv < 100) & (flores > 0))
+					si(flores > 0)
+						depositarFlor
+						flores:= flores - 1
 					mover
 			sino
 				si((flor = F) & (papel = V))
-					repetir papeles
-						depositarPapel
+					mientras((PosAv < 100) & (papeles > 0))
+						si(papeles > 0)
+							depositarPapel
+							papeles:= papeles - 1
 						mover
 	fin
 
