@@ -1,0 +1,239 @@
+programa punto6
+
+procesos
+
+	proceso RecorrerYDepositar(E papeles: numero; E flores: numero; E flor: boolean; E papel: boolean; E callePuesto: numero)
+	comenzar
+		Pos(1, callePuesto)
+		repetir 2
+			derecha
+		si((flor = V) & (papel = V))
+			mientras((papeles > 0) | (flores > 0))
+				si(papeles > 0)
+					depositarPapel
+					papeles:= papeles - 1
+				si(flores > 0)
+					depositarFlor
+					flores:= flores - 1
+				mover
+		sino
+			si((flor = V) & (papel = F))
+				repetir flores
+					depositarFlor
+					mover
+			sino
+				si((flor = F) & (papel = V))
+					repetir papeles
+						depositarPapel
+						mover
+	fin
+
+	proceso enviar(E numRobot: numero; E calle: numero)
+	comenzar
+		si(numRobot = 1)
+			EnviarMensaje(calle, r1)
+		sino 
+			si(numRobot = 2)
+				EnviarMensaje(calle, r2)
+			sino
+				si(numRobot = 3)
+					EnviarMensaje(calle, r3)
+	fin
+
+	proceso recolectar(ES papeles: numero; ES flores: numero; E flor: boolean; E papel: boolean)
+	comenzar
+		si((flor = V) & (papel = V))
+			mientras(HayPapelEnLaEsquina)
+				tomarPapel
+				papeles:= papeles + 1
+			mientras(HayFlorEnLaEsquina)
+				tomarFlor
+				flores:= flores + 1
+		sino
+			si((flor = V) & (papel = F))
+				mientras(HayFlorEnLaEsquina)
+					tomarFlor
+					flores:= flores + 1
+			sino
+				si((flor = F) & (papel = V))
+					mientras(HayPapelEnLaEsquina)
+						tomarPapel
+						papeles:= papeles + 1
+	fin
+
+areas
+
+	{cuadranteR1: AreaPC(2, 2, 7, 7)} {No me deja por cuadrante ya que me dice}
+	{cuadranteR2: AreaPC(5, 5, 14, 14)} {Que hay esquinas que se superponen así que}
+	{cuadranteR3: AreaPC(9, 9, 15, 15)} {Le mandé un area en donde van a estar todos}
+	cuadrantes: AreaPC(2, 2, 15, 15)
+	AreaJefe: AreaP(1, 1, 1, 1)
+	areaPrimero: AreaPC(1, 20, 100, 20)
+	areaSegundo: AreaPC(1, 21, 100, 21)
+	areaTercero: AreaPC(1, 22, 100, 22)
+
+robots
+
+	{robot tipoPapelero}
+	{comenzar }
+	{fin}
+
+	robot tipoFlorero
+	variables
+		quienSoy: numero
+		flores: numero
+		papeles: numero
+		callePuesto: numero
+	comenzar
+		flores:= 0
+		papeles:= 0
+		RecibirMensaje(quienSoy,jefe)
+		repetir 5
+			recolectar(papeles,flores,V,F)
+			mover
+		recolectar(papeles,flores,V,F)
+		derecha
+		repetir 2
+			mover
+			recolectar(papeles,flores,V,F)
+		BloquearEsquina((PosAv + 1),PosCa)
+		mover
+		recolectar(papeles,flores,V,F)
+		mover
+		LiberarEsquina((PosAv - 1),PosCa)
+		recolectar(papeles,flores,V,F)
+		mover
+		recolectar(papeles,flores,V,F)
+		derecha
+		mover
+		recolectar(papeles,flores,V,F)
+		BloquearEsquina(PosAv,(PosCa - 1))
+		mover
+		recolectar(papeles,flores,V,F)
+		mover
+		LiberarEsquina(PosAv,(PosCa + 1))
+		recolectar(papeles,flores,V,F)
+		repetir 2
+			mover
+			recolectar(papeles,flores,V,F)
+		derecha
+		repetir 4
+			mover
+			recolectar(papeles,flores,V,F)
+		EnviarMensaje(quienSoy,jefe)
+		RecibirMensaje(callePuesto,jefe)
+		RecorrerYDepositar(papeles, flores, V, F, callePuesto)
+	fin
+
+	robot tipoFloreroPapelero
+	variables
+		quienSoy: numero
+		flores: numero
+		papeles: numero
+		callePuesto: numero
+	comenzar
+		RecibirMensaje(quienSoy, jefe)
+		flores:= 0
+		papeles:= 0
+		recolectar(papeles,flores,V,V)
+		mover
+		recolectar(papeles,flores,V,V)
+		BloquearEsquina(PosAv, (PosCa + 1))
+		mover
+		recolectar(papeles,flores,V,V)
+		mover
+		LiberarEsquina(PosAv, (PosCa - 1))
+		repetir 6
+			recolectar(papeles,flores,V,V)
+			mover
+		recolectar(papeles,flores,V,V)
+		derecha
+		repetir 3
+			mover
+			recolectar(papeles,flores,V,V)
+		BloquearEsquina((PosAv + 1), PosCa)
+		mover
+		recolectar(papeles,flores,V,V)
+		mover
+		LiberarEsquina((PosAv - 1), PosCa)
+		repetir 4
+			recolectar(papeles,flores,V,V)
+			mover
+		recolectar(papeles,flores,V,V)
+		derecha
+		repetir 4
+			mover
+			recolectar(papeles,flores,V,V)
+		BloquearEsquina(PosAv, (PosCa - 1))
+		mover
+		recolectar(papeles,flores,V,V)
+		mover
+		LiberarEsquina(PosAv, (PosCa + 1))
+		repetir 3
+			recolectar(papeles,flores,V,V)
+			mover
+		recolectar(papeles,flores,V,V)
+		derecha
+		repetir 6
+			mover
+			recolectar(papeles,flores,V,V)
+		BloquearEsquina((PosAv - 1), PosCa)
+		mover
+		recolectar(papeles,flores,V,V)
+		mover
+		LiberarEsquina((PosAv + 1), PosCa)
+		recolectar(papeles,flores,V,V)
+		EnviarMensaje(quienSoy,jefe)
+		RecibirMensaje(callePuesto,jefe)
+		RecorrerYDepositar(papeles, flores, V, V, callePuesto)
+
+	fin
+
+	robot tipoJefe
+	variables
+		calle:numero
+		numRobot:numero
+	comenzar
+		calle:= 20
+		EnviarMensaje(1,r1)
+		EnviarMensaje(2,r2)
+		{EnviarMensaje(3,r3)}
+
+		repetir 2 {Tiene que ser 3}
+			RecibirMensaje(numRobot, *)
+			enviar(numRobot, calle)
+			calle:= calle + 1
+	fin
+
+variables
+
+	r1: tipoFlorero
+	r2: tipoFloreroPapelero
+	{r3: tipoPapelero}
+	jefe: tipoJefe
+
+comenzar
+
+	AsignarArea(r1, cuadrantes)
+	AsignarArea(r1, areaPrimero)
+	AsignarArea(r1, areaSegundo)
+	AsignarArea(r1, areaTercero)
+
+	AsignarArea(r2, cuadrantes)
+	AsignarArea(r2, areaPrimero)
+	AsignarArea(r2, areaSegundo)
+	AsignarArea(r2, areaTercero)
+
+	{AsignarArea(r3, cuadrantes)}
+	{AsignarArea(r3, areaPrimero)}
+	{AsignarArea(r3, areaSegundo)}
+	{AsignarArea(r3, areaTercero)}
+
+	AsignarArea(jefe, AreaJefe)
+	
+	Iniciar(r1, 2, 2)
+	Iniciar(r2, 5, 5)
+	{Iniciar(r3, 9, 9)}
+	Iniciar(jefe, 1, 1)
+
+fin
