@@ -2,6 +2,36 @@ programa punto6
 
 procesos
 
+	proceso moverRecolectar(ES papeles: numero; ES flores: numero; E flor: boolean; E papel: boolean)
+	comenzar
+		si((flor = V) & (papel = V))
+			mover
+			recolectar(papeles,flores,V,V)
+		sino
+			si((flor = V) & (papel = F))
+				mover
+				recolectar(papeles,flores,V,F)
+			sino
+				si((flor = F) & (papel = V))
+					mover
+					recolectar(papeles,flores,F,V)
+	fin
+
+	proceso recolectarMover(ES papeles: numero; ES flores: numero; E flor: boolean; E papel: boolean)
+	comenzar
+		si((flor = V) & (papel = V))
+			recolectar(papeles,flores,V,V)
+			mover
+		sino
+			si((flor = V) & (papel = F))
+				recolectar(papeles,flores,V,F)
+				mover
+			sino
+				si((flor = F) & (papel = V))
+					recolectar(papeles,flores,F,V)
+					mover
+	fin
+
 	proceso RecorrerYDepositar(E papeles: numero; E flores: numero; E flor: boolean; E papel: boolean; E callePuesto: numero)
 	comenzar
 		Pos(1, callePuesto)
@@ -89,32 +119,26 @@ robots
 		papeles:= 0
 		flores:= 0
 		repetir 4
-			recolectar(papeles,flores,F,V)
-			mover
+			recolectarMover(papeles,flores,F,V)
 		recolectar(papeles,flores,F,V)
 		BloquearEsquina(PosAv, (PosCa + 1))
-		mover
-		recolectar(papeles,flores,F,V)
+		moverRecolectar(papeles,flores,F,V)
 		mover
 		LiberarEsquina(PosAv, (PosCa - 1))
 		recolectar(papeles,flores,F,V)
 		derecha
 		repetir 6
-			mover
-			recolectar(papeles,flores,F,V)
+			moverRecolectar(papeles,flores,F,V)
 		derecha
 		repetir 6
-			mover
-			recolectar(papeles,flores,F,V)
+			moverRecolectar(papeles,flores,F,V)
 		derecha
 		BloquearEsquina((PosAv - 1), PosCa)
-		mover
-		recolectar(papeles,flores,F,V)
+		moverRecolectar(papeles,flores,F,V)
 		mover
 		LiberarEsquina((PosAv + 1), PosCa)
 		repetir 3
-			recolectar(papeles,flores,F,V)
-			mover
+			recolectarMover(papeles,flores,F,V)
 		recolectar(papeles,flores,F,V)
 		EnviarMensaje(quienSoy,jefe)
 		RecibirMensaje(callePuesto,jefe)
@@ -132,37 +156,29 @@ robots
 		papeles:= 0
 		RecibirMensaje(quienSoy,jefe)
 		repetir 5
-			recolectar(papeles,flores,V,F)
-			mover
+			recolectarMover(papeles,flores,V,F)
 		recolectar(papeles,flores,V,F)
 		derecha
 		repetir 2
-			mover
-			recolectar(papeles,flores,V,F)
+			moverRecolectar(papeles,flores,V,F)
 		BloquearEsquina((PosAv + 1),PosCa)
-		mover
-		recolectar(papeles,flores,V,F)
+		moverRecolectar(papeles,flores,V,F)
 		mover
 		LiberarEsquina((PosAv - 1),PosCa)
-		recolectar(papeles,flores,V,F)
-		mover
+		recolectarMover(papeles,flores,V,F)
 		recolectar(papeles,flores,V,F)
 		derecha
-		mover
-		recolectar(papeles,flores,V,F)
+		moverRecolectar(papeles,flores,V,F)
 		BloquearEsquina(PosAv,(PosCa - 1))
-		mover
-		recolectar(papeles,flores,V,F)
+		moverRecolectar(papeles,flores,V,F)
 		mover
 		LiberarEsquina(PosAv,(PosCa + 1))
 		recolectar(papeles,flores,V,F)
 		repetir 2
-			mover
-			recolectar(papeles,flores,V,F)
+			moverRecolectar(papeles,flores,V,F)
 		derecha
 		repetir 4
-			mover
-			recolectar(papeles,flores,V,F)
+			moverRecolectar(papeles,flores,V,F)
 		EnviarMensaje(quienSoy,jefe)
 		RecibirMensaje(callePuesto,jefe)
 		RecorrerYDepositar(papeles, flores, V, F, callePuesto)
@@ -178,51 +194,40 @@ robots
 		RecibirMensaje(quienSoy, jefe)
 		flores:= 0
 		papeles:= 0
-		recolectar(papeles,flores,V,V)
-		mover
+		recolectarMover(papeles,flores,V,V)
 		recolectar(papeles,flores,V,V)
 		BloquearEsquina(PosAv, (PosCa + 1))
-		mover
-		recolectar(papeles,flores,V,V)
+		moverRecolectar(papeles,flores,V,V)
 		mover
 		LiberarEsquina(PosAv, (PosCa - 1))
 		repetir 6
-			recolectar(papeles,flores,V,V)
-			mover
+			recolectarMover(papeles,flores,V,V)
 		recolectar(papeles,flores,V,V)
 		derecha
 		repetir 3
-			mover
-			recolectar(papeles,flores,V,V)
+			moverRecolectar(papeles,flores,V,V)
 		BloquearEsquina((PosAv + 1), PosCa)
-		mover
-		recolectar(papeles,flores,V,V)
+		moverRecolectar(papeles,flores,V,V)
 		mover
 		LiberarEsquina((PosAv - 1), PosCa)
 		repetir 4
-			recolectar(papeles,flores,V,V)
-			mover
+			recolectarMover(papeles,flores,V,V)
 		recolectar(papeles,flores,V,V)
 		derecha
 		repetir 4
-			mover
-			recolectar(papeles,flores,V,V)
+			moverRecolectar(papeles,flores,V,V)
 		BloquearEsquina(PosAv, (PosCa - 1))
-		mover
-		recolectar(papeles,flores,V,V)
+		moverRecolectar(papeles,flores,V,V)
 		mover
 		LiberarEsquina(PosAv, (PosCa + 1))
 		repetir 3
-			recolectar(papeles,flores,V,V)
-			mover
+			recolectarMover(papeles,flores,V,V)
 		recolectar(papeles,flores,V,V)
 		derecha
 		repetir 6
-			mover
-			recolectar(papeles,flores,V,V)
+			moverRecolectar(papeles,flores,V,V)
 		BloquearEsquina((PosAv - 1), PosCa)
-		mover
-		recolectar(papeles,flores,V,V)
+		moverRecolectar(papeles,flores,V,V)
 		mover
 		LiberarEsquina((PosAv + 1), PosCa)
 		recolectar(papeles,flores,V,V)
