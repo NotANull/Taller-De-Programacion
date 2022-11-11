@@ -8,7 +8,7 @@ procesos
 		repetir 2
 			derecha
 		si((flor = V) & (papel = V))
-			mientras((PosAv < 100) & (papeles > 0) | (flores > 0))
+			mientras((PosAv < 100) & ((papeles > 0) | (flores > 0) ))
 				si(papeles > 0)
 					depositarPapel
 					papeles:= papeles - 1
@@ -78,9 +78,48 @@ areas
 
 robots
 
-	{robot tipoPapelero}
-	{comenzar }
-	{fin}
+	robot tipoPapelero
+	variables
+		quienSoy: numero
+		papeles: numero
+		flores: numero
+		callePuesto: numero
+	comenzar
+		RecibirMensaje(quienSoy, jefe)
+		papeles:= 0
+		flores:= 0
+		repetir 4
+			recolectar(papeles,flores,F,V)
+			mover
+		recolectar(papeles,flores,F,V)
+		BloquearEsquina(PosAv, (PosCa + 1))
+		mover
+		recolectar(papeles,flores,F,V)
+		mover
+		LiberarEsquina(PosAv, (PosCa - 1))
+		recolectar(papeles,flores,F,V)
+		derecha
+		repetir 6
+			mover
+			recolectar(papeles,flores,F,V)
+		derecha
+		repetir 6
+			mover
+			recolectar(papeles,flores,F,V)
+		derecha
+		BloquearEsquina((PosAv - 1), PosCa)
+		mover
+		recolectar(papeles,flores,F,V)
+		mover
+		LiberarEsquina((PosAv + 1), PosCa)
+		repetir 3
+			recolectar(papeles,flores,F,V)
+			mover
+		recolectar(papeles,flores,F,V)
+		EnviarMensaje(quienSoy,jefe)
+		RecibirMensaje(callePuesto,jefe)
+		RecorrerYDepositar(papeles, flores, F, V, callePuesto)
+	fin
 
 	robot tipoFlorero
 	variables
@@ -201,9 +240,9 @@ robots
 		calle:= 20
 		EnviarMensaje(1,r1)
 		EnviarMensaje(2,r2)
-		{EnviarMensaje(3,r3)}
+		EnviarMensaje(3,r3)
 
-		repetir 2 {Tiene que ser 3}
+		repetir 3
 			RecibirMensaje(numRobot, *)
 			enviar(numRobot, calle)
 			calle:= calle + 1
@@ -213,7 +252,7 @@ variables
 
 	r1: tipoFlorero
 	r2: tipoFloreroPapelero
-	{r3: tipoPapelero}
+	r3: tipoPapelero
 	jefe: tipoJefe
 
 comenzar
@@ -228,16 +267,16 @@ comenzar
 	AsignarArea(r2, areaSegundo)
 	AsignarArea(r2, areaTercero)
 
-	{AsignarArea(r3, cuadrantes)}
-	{AsignarArea(r3, areaPrimero)}
-	{AsignarArea(r3, areaSegundo)}
-	{AsignarArea(r3, areaTercero)}
+	AsignarArea(r3, cuadrantes)
+	AsignarArea(r3, areaPrimero)
+	AsignarArea(r3, areaSegundo)
+	AsignarArea(r3, areaTercero)
 
 	AsignarArea(jefe, AreaJefe)
 	
 	Iniciar(r1, 2, 2)
 	Iniciar(r2, 5, 5)
-	{Iniciar(r3, 9, 9)}
+	Iniciar(r3, 9, 9)
 	Iniciar(jefe, 1, 1)
 
 fin
