@@ -1,0 +1,222 @@
+programa punto6
+procesos
+  proceso Enviar(E numRobot:numero; E calle:numero)
+  comenzar
+    si(numRobot = 1)
+      EnviarMensaje(calle,r1)
+    sino 
+      si(numRobot = 2)
+        EnviarMensaje(calle,r2)
+      sino
+        si(numRobot = 3)
+          EnviarMensaje(calle,r3)
+  fin
+
+  proceso recolectar(ES papeles: numero; ES flores: numero; E flor: boolean; E papel: boolean)
+  comenzar
+    si((flor = V) & (papel = V))
+      mientras(HayPapelEnLaEsquina)
+        tomarPapel
+        papeles:= papeles + 1
+      mientras(HayFlorEnLaEsquina)
+        tomarFlor
+        flores:= flores + 1
+    sino
+      si((flor = V) & (papel = F))
+        mientras(HayFlorEnLaEsquina)
+          tomarFlor
+          flores:= flores + 1
+      sino
+        si((flor = F) & (papel = V))
+          mientras(HayPapelEnLaEsquina)
+            tomarPapel
+            papeles:= papeles + 1
+  fin
+  proceso depositar(ES papeles:numero;ES flores:numero; E flor: boolean; E papel: boolean)
+  comenzar
+    si((flor = V) & (papel = V))
+      si(flores>0)
+        depositarFlor
+        flores:=flores - 1
+      si(papeles>0)
+        depositarPapel
+        papeles:=papeles - 1
+    si ((flor = V)&(papel = F ))
+      si(flores>0)
+        depositarFlor
+        flores:=flores - 1
+    si((flor = F)&(papel = V))
+      si(papeles>0)
+        depositarPapel
+        papeles:=papeles - 1
+  fin
+  proceso MoverYRecolectar(E pasos:numero; ES papeles:numero;ES flores:numero; E flor:boolean; E papel:boolean)
+  comenzar
+    repetir pasos
+      recolectar(papeles,flores,flor,papel)
+      mover
+  fin
+  proceso MoverYDepositar(E pasos:numero;ES papeles:numero;ES flores:numero;E flor:boolean; E papel:boolean)
+  comenzar
+    mientras ((flores > 0)|(papeles > 0))&(pasos > 0)
+      depositar(papeles,flores,flor,papel)
+      mover
+      pasos:= pasos - 1
+  fin
+areas
+  cuadranteTotal: AreaPC(2,2,16,16)
+  AreaJefe: AreaP(1, 1, 1, 1)
+  areaPrimero: AreaPC(1, 20, 100, 20)
+  areaSegundo: AreaPC(1, 21, 100, 21)
+  areaTercero: AreaPC(1, 22, 100, 22)
+robots
+  robot tipoPapelero
+  variables
+    quienSoy:numero
+    papeles:numero
+    flores:numero
+    callePuesto:numero
+  comenzar 
+    papeles:=0
+    RecibirMensaje(quienSoy,jefe)
+    MoverYRecolectar(5,papeles,flores,F,V)
+    BloquearEsquina(PosAv,PosCa + 1)
+    MoverYRecolectar(2,papeles,flores,F,V)
+    LiberarEsquina(PosAv,PosCa - 1)
+    derecha
+    MoverYRecolectar(7,papeles,flores,F,V)
+    derecha
+    MoverYRecolectar(7,papeles,flores,F,V)
+    derecha
+    BloquearEsquina(PosAv - 1,PosCa)
+    MoverYRecolectar(2,papeles,flores,F,V)
+    LiberarEsquina(PosAv + 1,PosCa)
+    MoverYRecolectar(5,papeles,flores,F,V)
+    EnviarMensaje(quienSoy,jefe)
+    RecibirMensaje(callePuesto,jefe)
+    Pos(1,callePuesto)
+    repetir 2
+      derecha
+    MoverYDepositar(99,papeles,flores,F,V)
+
+  fin
+
+  robot tipoFlorero
+  variables
+    quienSoy:numero
+    flores:numero
+    papeles:numero
+    callePuesto:numero
+  comenzar
+    flores:=0
+    RecibirMensaje(quienSoy,jefe)
+    MoverYRecolectar(6,papeles,flores,V,F)
+    derecha
+    MoverYRecolectar(2,papeles,flores,V,F)
+    BloquearEsquina(PosAv + 1,PosCa)
+    MoverYRecolectar(2,papeles,flores,V,F)
+    LiberarEsquina(PosAv - 1,PosCa)
+    MoverYRecolectar(2,papeles,flores,V,F)
+    derecha
+    MoverYRecolectar(2,papeles,flores,V,F)
+    BloquearEsquina(PosAv,PosCa - 1)
+    MoverYRecolectar(2,papeles,flores,V,F)
+    LiberarEsquina(PosAv,PosCa + 1)
+    MoverYRecolectar(2,papeles,flores,V,F)
+    derecha
+    MoverYRecolectar(6,papeles,flores,V,F)
+    EnviarMensaje(quienSoy,jefe)
+    RecibirMensaje(callePuesto,jefe)
+    Pos(1,callePuesto)
+    repetir 2
+      derecha
+    MoverYDepositar(99,papeles,flores,V,F)
+  fin
+
+  robot tipoFloreroPapelero
+  variables
+    flores:numero
+    papeles:numero
+    quienSoy:numero
+    callePuesto:numero
+  comenzar
+    flores:=0
+    papeles:=0
+    RecibirMensaje(quienSoy,jefe)
+    MoverYRecolectar(2,papeles,flores,V,V)
+    BloquearEsquina(PosAv,PosCa + 1)
+    MoverYRecolectar(2,papeles,flores,V,V)
+    LiberarEsquina(PosAv,PosCa - 1)
+    MoverYRecolectar(6,papeles,flores,V,V)
+    derecha
+    MoverYRecolectar(3,papeles,flores,V,V)
+    BloquearEsquina(PosAv + 1,PosCa)
+    MoverYRecolectar(2,papeles,flores,V,V)
+    LiberarEsquina(PosAv - 1,PosCa)
+    MoverYRecolectar(5,papeles,flores,V,V)
+    derecha
+    MoverYRecolectar(5,papeles,flores,V,V)
+    BloquearEsquina(PosAv,PosCa - 1)
+    MoverYRecolectar(2,papeles,flores,V,V)
+    LiberarEsquina(PosAv,PosCa + 1)
+    MoverYRecolectar(3,papeles,flores,V,V)
+    derecha
+    MoverYRecolectar(6,papeles,flores,V,V)
+    BloquearEsquina(PosAv - 1,PosCa)
+    MoverYRecolectar(2,papeles,flores,V,V)
+    LiberarEsquina(PosAv + 1,PosCa)
+    MoverYRecolectar(2,papeles,flores,V,V)
+    EnviarMensaje(quienSoy,jefe)
+    RecibirMensaje(callePuesto,jefe)
+    Pos(1,callePuesto)
+    repetir 2
+      derecha 
+    MoverYDepositar(99,papeles,flores,V,V)
+    
+  fin
+
+  robot tipoJefe
+  variables
+    calle:numero
+    numRobot:numero
+  comenzar
+    calle:=20
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+    
+    repetir 3 
+      RecibirMensaje(numRobot,*)
+      Enviar(numRobot,calle)
+      calle:=calle+1
+  fin
+
+variables
+  r1: tipoFlorero
+  r2: tipoFloreroPapelero
+  r3: tipoPapelero
+  jefe: tipoJefe
+comenzar
+  AsignarArea(r1, cuadranteTotal)
+  AsignarArea(r1, areaPrimero)
+  AsignarArea(r1, areaSegundo)
+  AsignarArea(r1, areaTercero)
+
+  AsignarArea(r2, cuadranteTotal)
+  AsignarArea(r2, areaPrimero)
+  AsignarArea(r2, areaSegundo)
+  AsignarArea(r2, areaTercero)
+
+  AsignarArea(r3, cuadranteTotal)
+  AsignarArea(r3, areaPrimero)
+  AsignarArea(r3, areaSegundo)
+  AsignarArea(r3, areaTercero)
+
+  AsignarArea(jefe, AreaJefe)
+  
+  Iniciar(r1, 2, 2)
+  Iniciar(r2, 5, 5)
+  Iniciar(r3, 9, 9)
+  Iniciar(jefe, 1, 1)
+
+fin
