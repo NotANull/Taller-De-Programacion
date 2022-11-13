@@ -2,6 +2,83 @@ programa parcial
 
 procesos
 
+  proceso procesarElementos(ES totalMaxElementos: numero; ES robotMaxElementos: numero; E totalElementos: numero; E nRobot: numero; E flor: boolean)
+  comenzar
+    si(flor)
+      si(totalElementos > totalMaxElementos)
+        totalMaxElementos:= totalElementos
+        robotMaxElementos:= nRobot
+    sino
+      si(totalElementos > totalMaxElementos)
+        totalMaxElementos:= totalElementos
+        robotMaxElementos:= nRobot
+        
+  fin
+
+  proceso enviarElementos(E quienSoy: numero; E elemento: numero; E flor: boolean)
+  comenzar
+    EnviarMensaje(quienSoy, fiscal)
+    si(flor)
+      EnviarMensaje(elemento, fiscal)
+    sino
+      EnviarMensaje(elemento, fiscal)
+  fin
+
+  proceso izquierda
+  comenzar
+    repetir 3
+      derecha
+  fin
+
+  proceso depositar(E elemento: numero; E flor: boolean)
+  variables
+    avActual: numero
+    caActual: numero
+  comenzar
+    avActual:= PosAv
+    caActual:= PosCa
+    si(flor)
+      mientras(elemento > 0)
+        BloquearEsquina(10, 10)
+        Pos(10, 10)
+        depositarFlor
+        elemento:= elemento - 1
+        Pos(avActual, caActual)
+        LiberarEsquina(10, 10)
+    sino
+      mientras(elemento > 0)
+        BloquearEsquina(10, 10)
+        Pos(10, 10)
+        depositarPapel
+        elemento:= elemento - 1
+        Pos(avActual, caActual)
+        LiberarEsquina(10, 10)
+  fin
+
+  proceso juntar(ES elemento: numero; E flor: boolean)
+  comenzar
+    si(flor)
+      mientras(HayFlorEnLaEsquina)
+        tomarFlor
+        elemento:= elemento + 1
+    sino
+      mientras(HayPapelEnLaEsquina)
+        tomarPapel
+        elemento:= elemento + 1
+  fin
+
+  proceso juntarMover(ES elemento: numero; E flor: boolean)
+  comenzar
+    juntar(elemento, flor)
+    mover
+  fin
+
+  proceso moverJuntar(ES elemento: numero; E flor: boolean)
+  comenzar
+    mover
+    juntar(elemento, flor)
+  fin
+
   proceso asignarId
   comenzar
     EnviarMensaje(1, r1)
@@ -27,46 +104,137 @@ areas
 
 robots
 
+  robot tipoR1
+  variables
+    quienSoy: numero
+    flores: numero
+    papeles: numero
+    termineR2: boolean
+    termineR3: boolean
+  comenzar
+    RecibirMensaje(quienSoy, fiscal)
+    flores:= 0
+    papeles:= 0
+    repetir 3
+      moverJuntar(flores, V){X}
+    enviarElementos(quienSoy, flores, V){x}
+    depositar(flores, V){x}
+    EnviarMensaje(V, r2)
+    EnviarMensaje(V, r3)
+    RecibirMensaje(termineR2, r2)
+    RecibirMensaje(termineR3, r3)
+    Pos(7, 5)
+    izquierda{x}
+    repetir 2
+      juntarMover(papeles, F){x}
+    juntar(papeles, F){x}
+    enviarElementos(quienSoy, papeles, F){x}
+    depositar(papeles, F){x}
+  fin
+  
+  robot tipoR2
+  variables
+    quienSoy: numero
+    flores: numero
+    papeles: numero
+    termineR1: boolean
+    termineR3: boolean
+  comenzar
+    RecibirMensaje(quienSoy, fiscal)
+    flores:= 0
+    papeles:= 0
+    repetir 3
+      moverJuntar(flores, V)
+    enviarElementos(quienSoy, flores, V)
+    depositar(flores, V)
+    EnviarMensaje(V, r1)
+    EnviarMensaje(V, r3)
+    RecibirMensaje(termineR1, r1)
+    RecibirMensaje(termineR3, r3)
+    Pos(5, 6)
+    derecha
+    repetir 2
+      juntarMover(papeles, F)
+    juntar(papeles, F)
+    enviarElementos(quienSoy, papeles, F)
+    depositar(papeles, F)
+  fin
+  
+  robot tipoR3
+  variables
+    quienSoy: numero
+    flores: numero
+    papeles: numero
+    termineR1: boolean
+    termineR2: boolean
+  comenzar
+    RecibirMensaje(quienSoy, fiscal)
+    flores:= 0
+    papeles:= 0
+    repetir 3
+      moverJuntar(flores, F)
+    enviarElementos(quienSoy, flores, V)
+    depositar(flores, V)
+    EnviarMensaje(V, r1)
+    EnviarMensaje(V, r2)
+    RecibirMensaje(termineR1, r1)
+    RecibirMensaje(termineR2, r2)
+    Pos(5, 7)
+    derecha
+    repetir 2
+      juntarMover(papeles, F)
+    juntar(papeles, F)
+    enviarElementos(quienSoy, papeles, F)
+    depositar(papeles, F)
+  fin
+
   robot tipoFiscalizador
   variables
     numRobot: numero
     totalFlores: numero
+    totalPapeles: numero
     totalMaxFlores: numero
+    totalMaxPapeles: numero
     robotMaxFlores: numero
+    robotMaxPapeles: numero
   comenzar
     asignarId
 
     totalMaxFlores:= -1
     robotMaxFlores:= -1
+    totalMaxPapeles:= -1
+    robotMaxPapeles:= -1
+    
 
     repetir 3
       RecibirMensaje(numRobot, *)
       si(numRobot = 1)
         RecibirMensaje(totalFlores, r1)
-        procesarFlores(totalMaxFlores, robotMaxFlores, totalFlores, numRobot)
+        procesarElementos(totalMaxFlores, robotMaxFlores, totalFlores, numRobot, V)
       sino
         si(numRobot = 2)
           RecibirMensaje(totalFlores, r2)
-          procesarFlores(totalMaxFlores, robotMaxFlores, totalFlores, numRobot)
+          procesarElementos(totalMaxFlores, robotMaxFlores, totalFlores, numRobot, V)
         sino
           RecibirMensaje(totalFlores, r3)
-          procesarFlores(totalMaxFlores, robotMaxFlores, totalFlores, numRobot)
+          procesarElementos(totalMaxFlores, robotMaxFlores, totalFlores, numRobot, V)
+
+    Informar('Robot_que_juntó_más_flores_en_la_etapa_1',robotMaxFlores)
 
     repetir 3
       RecibirMensaje(numRobot, *)
       si(numRobot = 1)
         RecibirMensaje(totalPapeles, r1)
-        procesarPapeles(totalMaxPapeles, robotMaxPapeles, totalPapeles, numRobot)
+        procesarElementos(totalMaxPapeles, robotMaxPapeles, totalPapeles, numRobot, F)
       sino
         si(numRobot = 2)
           RecibirMensaje(totalPapeles, r2)
-          procesarPapeles(totalMaxPapeles, robotMaxPapeles, totalPapeles, numRobot)
+          procesarElementos(totalMaxPapeles, robotMaxPapeles, totalPapeles, numRobot, F)
         sino
           RecibirMensaje(totalPapeles, r3)
-          procesarPapeles(totalMaxPapeles, robotMaxPapeles, totalPapeles, numRobot)
+          procesarElementos(totalMaxPapeles, robotMaxPapeles, totalPapeles, numRobot, F)
 
-    Informar('Robot_que_juntó_más_flores_en_la_etapa_1',robotMaxFlores)
-    Informar('Robot_que_juntó_más_papeles_en_la_etapa_1',robotMaxPapeles)
+    Informar('Robot_que_juntó_más_papeles_en_la_etapa_2',robotMaxPapeles)
 
   fin
 
