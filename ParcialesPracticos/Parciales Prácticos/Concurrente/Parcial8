@@ -1,0 +1,97 @@
+programa parcial
+
+procesos
+
+  proceso asignarId
+  comenzar
+    EnviarMensaje(1, r1)
+    EnviarMensaje(2, r2)
+    EnviarMensaje(3, r3)
+  fin
+
+  proceso procesarFlores(ES totalMaxFlores: numero; ES robotMaxFlores: numero; E totalFlores: numero; E nRobot: numero)
+  comenzar
+    si(totalFlores > totalMaxFlores)
+      totalMaxFlores:= totalFlores
+      robotMaxFlores:= nRobot
+  fin
+
+areas
+
+  areaEtapaRecolectar: AreaPC(5, 5, 7, 7)
+  areaDeposito: AreaPC(10, 10, 10, 10)
+  areaR1: AreaP(5, 4, 5, 4)
+  areaR2: AreaP(6, 4, 6, 4)
+  areaR3: AreaP(7, 4, 7, 4)
+  areaFiscalizador: AreaP(1, 1, 1, 1)
+
+robots
+
+  robot tipoFiscalizador
+  variables
+    numRobot: numero
+    totalFlores: numero
+    totalMaxFlores: numero
+    robotMaxFlores: numero
+  comenzar
+    asignarId
+
+    totalMaxFlores:= -1
+    robotMaxFlores:= -1
+
+    repetir 3
+      RecibirMensaje(numRobot, *)
+      si(numRobot = 1)
+        RecibirMensaje(totalFlores, r1)
+        procesarFlores(totalMaxFlores, robotMaxFlores, totalFlores, numRobot)
+      sino
+        si(numRobot = 2)
+          RecibirMensaje(totalFlores, r2)
+          procesarFlores(totalMaxFlores, robotMaxFlores, totalFlores, numRobot)
+        sino
+          RecibirMensaje(totalFlores, r3)
+          procesarFlores(totalMaxFlores, robotMaxFlores, totalFlores, numRobot)
+
+    repetir 3
+      RecibirMensaje(numRobot, *)
+      si(numRobot = 1)
+        RecibirMensaje(totalPapeles, r1)
+        procesarPapeles(totalMaxPapeles, robotMaxPapeles, totalPapeles, numRobot)
+      sino
+        si(numRobot = 2)
+          RecibirMensaje(totalPapeles, r2)
+          procesarPapeles(totalMaxPapeles, robotMaxPapeles, totalPapeles, numRobot)
+        sino
+          RecibirMensaje(totalPapeles, r3)
+          procesarPapeles(totalMaxPapeles, robotMaxPapeles, totalPapeles, numRobot)
+
+    Informar('Robot_que_juntó_más_flores_en_la_etapa_1',robotMaxFlores)
+    Informar('Robot_que_juntó_más_papeles_en_la_etapa_1',robotMaxPapeles)
+
+  fin
+
+variables
+  r1: tipoR1
+  r2: tipoR2
+  r3: tipoR3
+  fiscal: tipoFiscalizador
+comenzar
+  AsignarArea(r1, areaEtapaRecolectar)
+  AsignarArea(r1, areaDeposito)
+  AsignarArea(r1, areaR1)
+
+  AsignarArea(r2, areaEtapaRecolectar)
+  AsignarArea(r2, areaDeposito)
+  AsignarArea(r2, areaR2)
+
+  AsignarArea(r3, areaEtapaRecolectar)
+  AsignarArea(r3, areaDeposito)
+  AsignarArea(r3, areaR3)
+
+  AsignarArea(fiscal, areaFiscalizador)
+
+  Iniciar(r1, 5, 4)
+  Iniciar(r2, 6, 4)
+  Iniciar(r3, 7, 4)
+  Iniciar(fiscal, 1, 1)
+fin
