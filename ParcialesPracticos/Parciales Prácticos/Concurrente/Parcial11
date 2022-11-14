@@ -1,0 +1,159 @@
+programa parcial11
+
+procesos
+
+  proceso depositar(ES flores: numero; ES papeles: numero)
+  variables
+    avActual: numero
+    caActual: numero
+  comenzar
+    avActual:= PosAv
+    caActual:= PosCa
+    mientras(flores > 0)
+      BloquearEsquina(21, 21)
+      Pos(21, 21)
+      depositarFlor
+      flores:= flores - 1
+      Pos(avActual, caActual)
+      LiberarEsquina(21, 21)
+    mientras(papeles > 0)
+      BloquearEsquina(22, 22)
+      Pos(22, 22)
+      depositarPapel
+      papeles:= papeles - 1
+      Pos(avActual, caActual)
+      LiberarEsquina(22, 22)
+  fin
+
+  proceso juntar(ES flores: numero; ES papeles: numero)
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      flores:= flores + 1
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+      papeles:= papeles + 1
+  fin
+
+  proceso trabajar(E quienSoy: numero; E alto: numero; E ancho: numero)
+  variables
+    flores: numero
+    papeles: numero
+    objetos: numero
+  comenzar
+    flores:= 0
+    papeles:= 0
+    repetir 2
+      repetir alto
+        juntar(flores, papeles)
+        mover
+      objetos:= 0
+      objetos:= flores + papeles
+      EnviarMensaje(quienSoy, coordinador)
+      EnviarMensaje(objetos, coordinador)
+      depositar(flores, papeles)
+      derecha
+      repetir ancho
+        juntar(flores, papeles)
+        mover
+      objetos:= 0
+      objetos:= flores + papeles
+      EnviarMensaje(quienSoy, coordinador)
+      EnviarMensaje(objetos, coordinador)
+      depositar(flores, papeles)
+      derecha
+        
+  fin
+
+  proceso definirRandom
+  variables
+    altoRandom: numero
+    anchoRandom: numero
+  comenzar
+    Random(altoRandom, 1, 19)
+    Random(anchoRandom, 1, 19)
+    EnviarMensaje(altoRandom, r1)
+    EnviarMensaje(anchoRandom, r1)
+
+    Random(altoRandom, 1, 19)
+    Random(anchoRandom, 1, 19)
+    EnviarMensaje(altoRandom, r2)
+    EnviarMensaje(anchoRandom, r2)
+  fin
+
+  proceso identificar
+  comenzar
+    EnviarMensaje(1, r1)
+    EnviarMensaje(2, r2)
+  fin
+
+areas
+  areaTrabajoR1: AreaP(1, 1, 20, 20)
+  areaTrabajoR2: AreaP(21, 1, 40, 20)
+  areaDepositoFlores: AreaPC(21, 21, 21, 21)
+  areaDepositoPapeles: AreaPC(22, 22, 22, 22)
+  areaCoordinador: AreaP(23, 23, 23, 23)
+robots
+
+  robot tipoTrabajador
+  variables
+    quienSoy: numero
+    alto: numero
+    ancho: numero
+  comenzar
+    RecibirMensaje(quienSoy, coordinador)
+    RecibirMensaje(alto, coordinador)
+    RecibirMensaje(ancho, coordinador)
+    trabajar(quienSoy, alto, ancho)
+    
+  fin
+
+  robot tipoCoordinador
+  variables
+    numRobot: numero
+    objetos: numero
+    totalObjetosR1: numero
+    totalObjetosR2: numero
+  comenzar
+    identificar
+
+    definirRandom
+
+    repetir 8
+      RecibirMensaje(numRobot, *)
+      si(numRobot = 1)
+        RecibirMensaje(objetos, r1)
+        totalObjetosR1:= totalObjetosR1 + objetos
+      sino
+        RecibirMensaje(objetos, r2)
+        totalObjetosR2:= totalObjetosR2 + objetos
+        
+    si(totalObjetosR1 > totalObjetosR2)
+      Informar('Robot_ganador',1)
+    sino
+      si(totalObjetosR2 > totalObjetosR1)
+        Informar('Robot_ganador',2)
+      sino
+        Informar('Empate',0)
+    
+  fin
+
+variables
+  r1: tipoTrabajador
+  r2: tipoTrabajador
+  coordinador: tipoCoordinador
+comenzar
+  AsignarArea(r1, areaTrabajoR1)
+  AsignarArea(r1, areaDepositoFlores)
+  AsignarArea(r1, areaDepositoPapeles)
+
+  AsignarArea(r2, areaTrabajoR2)
+  AsignarArea(r2, areaDepositoFlores)
+  AsignarArea(r2, areaDepositoPapeles)
+
+  AsignarArea(coordinador, areaCoordinador)
+
+  Iniciar(r1, 1, 1)
+  Iniciar(r2, 21, 1)
+  Iniciar(coordinador, 23, 23)
+fin
