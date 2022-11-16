@@ -1,54 +1,4 @@
-program cualquiera;
-
-type
-
-	arbol = ^nodo;
-	nodo = record
-		dato: integer;
-		hi: arbol;
-		hd: arbol;
-	end;
-
-procedure cargarArbol(var a: arbol);
-
-	procedure generarRandom(var n: integer);
-	begin
-		n:= random(40); //Random entre 0 y 39
-		writeln('Se genera el numero: ', n);
-	end;
-	
-	procedure ingresoYo(var n: integer);
-	begin
-		write('Ingrese un numero: ');
-		readln(n);
-	end;
-
-	procedure insertar(var a: arbol; n: integer);
-
-	begin
-		if(a = nil) then begin
-			new(a);
-			a^.dato:= n;
-			a^.hi:= nil;
-			a^.hd:= nil;
-		end
-		else if(n < a^.dato) then
-			insertar(a^.hi, n)
-		else
-			insertar(a^.hd, n);
-	end;
-
-var
-	n: integer;
-begin
-	//generarRandom(n);
-	ingresoYo(n);
-	while(n <> 0) do begin
-		insertar(a, n);
-		//generarRandom(n);
-		ingresoYo(n);
-	end;
-end;
+// BUSCAR EN UN ARBOL RESPETANDO EL ORDEN.
 
 function buscarEnArbol(a: arbol; n: integer): arbol;
 begin
@@ -64,34 +14,30 @@ begin
 				buscarEnArbol:= buscarEnArbol(a^.hd, n);
 end;
 
-procedure imprimirArbolPreOrden(a: arbol);
+
+// BUSCAR EN UN ARBOL SIN RESPETAR EL ORDEN.
+function Buscar (a:arbol; x:integer): arbol;
 begin
-	if(a <> nil) then begin
-		imprimirArbolPreOrden(a^.hi);
-		imprimirArbolPreOrden(a^.hd);
-		write(a^.dato, ' - ');
-	end;
+	if (a = nil) then
+		Buscar := nil
+	else if (x = a^.dato) then
+		Buscar := a
+	else
+		Buscar := Buscar(a^.HI, x) or Buscar(a^.HD, x);
+
 end;
 
-var
-	a: arbol;
-	busquedaA: arbol;
-	nABuscar: integer;
+
+
+procedure buscar (a:arbol; x: integer; var ok:boolean);
 begin
-	Randomize;
-	
-	a:= nil;
-	busquedaA:= nil;
-	
-	cargarArbol(a);
-	
-	writeln();
-	
-	write('Ingrese el numero a buscar en el arbol: ');
-	readln(nABuscar);
-	busquedaA:= buscarEnArbol(a, nABuscar);
-	
-	writeln();
-	
-	imprimirArbolPreOrden(busquedaA);
-end.
+	if (a=nil)then
+		ok:=false
+	else if (a^.dato=x)then
+		ok:=true
+	else begin
+		buscar(a^.HI,x,ok);
+		if (not ok) then
+			buscar(a^.HD,x,ok);
+	end;
+end;
