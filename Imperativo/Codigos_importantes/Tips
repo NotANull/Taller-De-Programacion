@@ -10,3 +10,11 @@ TIP PARA ÁRBOLES:
 	*
 	Si tenemos que recorrer TODO EL ÁRBOL, es preferible usar
 	un PROCEDIMIENTO
+	
+	*
+	Si nos dicen que busquemos, devolvamos, etc. por algún campo o valor
+	en un árbol y dicho árbol ESTÁ ORDENADO POR ESE CRITERIO, campo o valor,
+	entonces vamos a usar una BÚSQUEDA ACOTADA O PARCIAL.
+	Y si nos dicen que busquemos, devolvamos, etc por algún campo o valor
+	en un árbol y dicho árbol NOOOOO!!! ESTÁ ORDENADO POR ESE CRITERIO, campo
+	o valor, entonces vamos a usar una BÚSQUEDA TOTAAAAL!!!!
