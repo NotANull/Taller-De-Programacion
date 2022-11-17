@@ -1,0 +1,12 @@
+TIP PARA ÁRBOLES:
+
+	*
+	En el momento de usar FUNCTION para recorrer un árbol
+	NO UTILIZAR el nombre de la función para retornar algo
+	si abajo de esa línea no hay más código para leer. Es
+	porque terminaría el método
+
+
+	*
+	Si tenemos que recorrer TODO EL ÁRBOL, es preferible usar
+	un PROCEDIMIENTO
