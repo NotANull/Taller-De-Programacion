@@ -1,5 +1,4 @@
 // BUSCAR EN UN ARBOL RESPETANDO EL ORDEN.
-
 function buscarEnArbol(a: arbol; n: integer): arbol;
 begin
 	if(a = nil) then
