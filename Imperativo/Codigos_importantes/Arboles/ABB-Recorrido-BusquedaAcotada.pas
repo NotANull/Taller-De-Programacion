@@ -1,27 +1,42 @@
-//RECORRIDO ACOTADO CON EL MISMO CRITERIO QUE ESTÁ ORDENADO. Por ejemplo:
-
-{
-Implementar un programa que contenga:
-
-
-	Un módulo que reciba la nueva estructura e informe el nombre y apellido de
-	aquellos alumnos cuyo legajo sea inferior a 15853.
-
-	***Hagamos de cuenta que anteriormente nos hayan pedido que carguemos el árbol
-	y que esté ordenado por dicho criterio y bla bla bla...***
-}
-
-//Como tengo que hacer un recorrido acotado, recorro dependiendo del ejercicio
-//En este método recorro numeros menores al que se encuentra en el árbol
-procedure alumnosLegajoInferior(a: arbol; num: integer);
+// BUSCAR EN UN ARBOL RESPETANDO EL ORDEN.
+function buscarEnArbol(a: arbol; n: integer): arbol;
 begin
-	if(a <> nil) then begin
-		if(a^.dato.numLeajo < num) then begin
-			writeln(a^.dato.numLegajo);
-			alumnosLegajoInferior(a^.hi, num);
-			alumnosLegajoInferior(a^.hd, num);
-		end
+	if(a = nil) then
+		buscarEnArbol:= nil
+	else
+		if(a^.dato = n) then
+			buscarEnArbol:= a
 		else
-			alumnosLegajoInferior(a^.hi, num);
+			if(n < a^.dato) then
+				buscarEnArbol:= buscarEnArbol(a^.hi, n)
+			else
+				buscarEnArbol:= buscarEnArbol(a^.hd, n);
+end;
+
+
+// BUSCAR EN UN ARBOL SIN RESPETAR EL ORDEN.
+function Buscar (a:arbol; x:integer): arbol;
+begin
+	if (a = nil) then
+		Buscar := nil
+	else if (x = a^.dato) then
+		Buscar := a
+	else
+		Buscar := Buscar(a^.HI, x) or Buscar(a^.HD, x);
+
+end;
+
+
+
+procedure buscar (a:arbol; x: integer; var ok:boolean);
+begin
+	if (a=nil)then
+		ok:=false
+	else if (a^.dato=x)then
+		ok:=true
+	else begin
+		buscar(a^.HI,x,ok);
+		if (not ok) then
+			buscar(a^.HD,x,ok);
 	end;
 end;
