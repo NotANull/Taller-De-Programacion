@@ -22,12 +22,12 @@ type
 		hd: arbol;
 	end;
 	
-	regArray = record
+	registroArray = record
 		dni: integer;
 		codigoPaciente: integer;
 	end;
 	
-	arrayPacientes = array [1..dimF] of regArray;
+	arrayPacientes = array [1..dimF] of registroArray;
 	
 	
 //--------------------COMIENZO DE LOS MÉTODOS--------------------\\
@@ -84,6 +84,45 @@ end;
 
 
 
+
+//--------------------COMIENZO DEL INCISO B--------------------\\
+procedure generarArrayPacientes(a: arbol);
+
+	procedure cargarArrayPacientes(a: arbol; var ap: arrayPacientes; var dimL: integer);
+	
+		procedure insertarPaciente(var ap: arrayPacientes; var dimL: integer; dniArbol, codigoPacienteArbol: integer);
+		begin
+			if(dimL < dimF) then begin
+				dimL:= dimL + 1;
+				ap[dimL].codigoPaciente:= codigoPacienteArbol;
+				ap[dimL].dni:= dniArbol;
+			end;
+		end;
+	
+	begin
+		if(a <> nil)then begin
+			cargarArrayPacientes(a^.hi, ap, dimL);
+			insertarPaciente(ap, dimL, a^.dato.dni, a^.dato.codigoPaciente);
+			cargarArrayPacientes(a^.hd, ap, dimL);
+		end;
+	end;
+
+var
+	ap: arrayPacientes;
+	dimL: integer;
+begin
+	if(a <> nil) then begin
+		writeln;
+		dimL:= 0;
+		cargarArrayPacientes(a, ap, dimL);
+	end
+	else
+		writeln('El arbol esta vacio');
+end;
+//--------------------FIN INCISO B--------------------\\
+
+
+
 //--------------------COMIENZO DEL INCISO C--------------------\\
 procedure aumentarCostoPaciente(var a: arbol);
 
@@ -125,13 +164,18 @@ end;
 //--------------------FIN INCISO C--------------------\\
 
 
-	
+
+
+
+//--------------------PROGRAMA PRINCIPAL--------------------\\
 var
 	a: arbol;
 begin
 	Randomize;
 	
 	generarArbol(a); //Inciso A
+	
+	generarArrayPacientes(a); //Inciso B
 	
 	aumentarCostoPaciente(a); //Inciso C
 end.
