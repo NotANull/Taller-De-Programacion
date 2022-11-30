@@ -219,7 +219,7 @@ begin
 	while(regCodigoMinimo.codProducto <> 9999) do begin
 		regActual.codProducto:= regCodigoMinimo.codProducto;
 		regActual.cantTotalProdVendido:= 0;
-		while (regActual.codProducto = regCodigoMinimo.codProducto) do begin
+		while( (regCodigoMinimo.codProducto <> 9999) and (regActual.codProducto = regCodigoMinimo.codProducto) ) do begin
 			regActual.cantTotalProdVendido:= regActual.cantTotalProdVendido + regCodigoMinimo.cantProdVendido;
 			determinarMinimo(v, regCodigoMinimo);
 		end;
