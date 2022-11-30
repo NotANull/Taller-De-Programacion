@@ -179,11 +179,11 @@ procedure mergeAcumulador(v: vector; var l: listaMerge);
 		for i:= 1 to dimF do begin
 			if( (v[i] <> nil) and (v[i]^.dato.codProducto <= regCodigoMinimo.codProducto) ) then begin
 				regCodigoMinimo.codProducto:= v[i]^.dato.codProducto;
+				regCodigoMinimo.cantProdVendido:= v[indice]^.dato.cantProdVendido;
 				indice:= i;
 			end;
 		end;
 		if(indice <> -1) then begin
-			regCodigoMinimo.cantProdVendido:= v[indice]^.dato.cantProdVendido;
 			v[indice]:= v[indice]^.sig;
 		end;
 	end;
