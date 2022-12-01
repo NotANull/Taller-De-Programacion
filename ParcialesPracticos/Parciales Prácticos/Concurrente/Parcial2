@@ -2,16 +2,16 @@ programa parcial2
 procesos
   proceso identificarRobots
   comenzar
-    EnviarMensaje(1, r1)
-    EnviarMensaje(1, r1)
-    EnviarMensaje(2, r1)
-    EnviarMensaje(2, r2)
+    EnviarMensaje(1, r1) {identificador robot1}
+    EnviarMensaje(1, r1) {avenida}
+    EnviarMensaje(2, r1) {calle}
+    EnviarMensaje(2, r2) {identificador robot2}
     EnviarMensaje(1, r2)
     EnviarMensaje(6, r2)
-    EnviarMensaje(3, r3)
+    EnviarMensaje(3, r3) {identificador robot3}
     EnviarMensaje(2, r3)
     EnviarMensaje(1, r3)
-    EnviarMensaje(4, r4)
+    EnviarMensaje(4, r4) {identificador robot4}
     EnviarMensaje(6, r4)
     EnviarMensaje(1, r4)
   fin
