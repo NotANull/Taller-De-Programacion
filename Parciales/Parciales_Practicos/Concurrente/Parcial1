@@ -1,0 +1,210 @@
+{EL ENUNCIADO DICE: SUPONGA QUE EXISTE LA CANTIDAD DE FLORES Y PAPELES PARA FORMAR LA LÍNEA.}
+{SI SE QUIERE CORRER EL PROGRAMA SIN PAPELES Y FLORES EN LA ESQUINA DE RECOLECCIÓN, TIRA ERROR.}
+{EN CASO DE QUERER CORRERLO SIN FLORES Y PAPELES, SE TENDRÍA QUE PREGUNTAR SI HAY FLOR O PAPEL}
+{EN LA ESQUINA, UTILIZANDO UN WHILE TRUE. DEPENDIENDO DEL TIPO DE ROBOT}
+programa parcial1
+
+procesos
+
+  proceso voyYVengo(E flor: boolean)
+  variables
+    avActual: numero
+    caActual: numero
+  comenzar
+    si(flor)
+      avActual:= PosAv
+      caActual:= PosCa
+      BloquearEsquina(15, 15)
+      Pos(15, 15)
+      tomarFlor
+      Pos(avActual, caActual)
+      LiberarEsquina(15, 15)
+      depositarFlor
+    sino
+      avActual:= PosAv
+      caActual:= PosCa
+      BloquearEsquina(15, 15)
+      Pos(15, 15)
+      tomarPapel
+      Pos(avActual, caActual)
+      LiberarEsquina(15, 15)
+      depositarPapel
+  fin
+
+  proceso identificarRobots
+  comenzar
+    EnviarMensaje(1, r1Equipo1)
+    EnviarMensaje(2, r2Equipo1)
+    EnviarMensaje(3, r1Equipo2)
+    EnviarMensaje(4, r2Equipo2)
+  fin
+
+areas
+
+  esquinaLEquipo1: AreaPC(5, 4, 5, 4)
+  verticalLEquipo1: AreaP(5, 5, 5, 16)
+  horizontalLEquipo1: AreaP(6, 4, 9, 4)
+
+  esquinaLEquipo2: AreaPC(11, 4, 11, 4)
+  verticalLEquipo2: AreaP(11, 5, 11, 16)
+  horizontalEquipo2: AreaP(12, 4, 15, 4)
+
+  areaJuntar: AreaPC(15, 15, 15, 15)
+  areaFiscal: AreaP(1, 1, 1, 1)
+  areaR1Equipo1: AreaP(50, 50, 50, 50)
+  areaR2Equipo1: AreaP(51, 51, 51, 51)
+  areaR1Equipo2: AreaP(52, 52, 52, 52)
+  areaR2Equipo2: AreaP(53, 53, 53, 53)
+
+robots
+
+  robot tipoFlorero
+  variables
+    quienSoy: numero
+    caActual: numero
+    avActual: numero
+  comenzar
+    RecibirMensaje(quienSoy, fiscal)
+    BloquearEsquina(15, 15)
+    Pos(15, 15)
+    tomarFlor
+    si(quienSoy = 1)
+      BloquearEsquina(5, 4)
+      Pos(5, 4)
+      LiberarEsquina(15, 15)
+      depositarFlor
+      mover
+      LiberarEsquina(5, 4)
+    sino
+      BloquearEsquina(11, 4)
+      Pos(11, 4)
+      LiberarEsquina(15, 15)
+      depositarFlor
+      mover
+      LiberarEsquina(11, 4)
+    repetir 11
+      voyYVengo(V)
+      mover
+    voyYVengo(V)
+    EnviarMensaje(quienSoy, fiscal)
+    EnviarMensaje(V, fiscal)
+  fin
+
+  robot tipoPapelero
+  variables
+    quienSoy: numero
+  comenzar
+    RecibirMensaje(quienSoy, fiscal)
+    derecha
+    BloquearEsquina(15, 15)
+    Pos(15, 15)
+    tomarPapel
+    si(quienSoy = 2)
+      BloquearEsquina(5, 4)
+      Pos(5, 4)
+      LiberarEsquina(15, 15)
+      depositarPapel
+      mover
+      LiberarEsquina(5, 4)
+    sino
+      BloquearEsquina(11, 4)
+      Pos(11, 4)
+      LiberarEsquina(15, 15)
+      depositarPapel
+      mover
+      LiberarEsquina(11, 4)
+    repetir 3
+      voyYVengo(F)
+      mover
+    voyYVengo(F)
+    EnviarMensaje(quienSoy, fiscal)
+    EnviarMensaje(V, fiscal)
+    
+  fin
+
+  robot tipoFiscalizador
+  variables
+    ok: boolean
+    numRobot: numero
+    termineR1Equipo1: boolean
+    termineR2Equipo1: boolean
+    termineR1Equipo2: boolean
+    termineR2Equipo2: boolean
+    participantes: numero
+  comenzar
+    ok:= V
+    participantes:= 4
+
+    identificarRobots
+
+    mientras(ok) {Recibo los mensajes de los robots que terminaron, pueden llegar como máximo 3}
+      RecibirMensaje(numRobot, *)
+      si(numRobot = 1)
+        RecibirMensaje(termineR1Equipo1, r1Equipo1)
+      sino
+        si(numRobot = 2)
+          RecibirMensaje(termineR2Equipo1, r2Equipo1)
+        sino
+          si(numRobot = 3)
+            RecibirMensaje(termineR1Equipo2, r1Equipo2)
+          sino
+            RecibirMensaje(termineR2Equipo2, r2Equipo2)
+      si((termineR1Equipo1 = V) & (termineR2Equipo1 = V))
+        Informar('Ganador_equipo',1)
+        ok:= F
+      sino
+        si((termineR1Equipo2 = V) & (termineR2Equipo2 = V))
+          Informar('Ganador_equipo',2)
+          ok:= F
+      participantes:= participantes - 1 {Utilizo una variable para después decir la cantidad de robots que me falta recibir mensajes}
+
+    repetir participantes {Recibo los mensajes de los robots que NO terminaron (los que faltan), pueden llegar como máximo 2}
+      RecibirMensaje(numRobot, *)
+      si(numRobot = 1)
+        RecibirMensaje(termineR1Equipo1, r1Equipo1)
+      sino
+        si(numRobot = 2)
+          RecibirMensaje(termineR2Equipo1, r2Equipo1)
+        sino
+          si(numRobot = 3)
+            RecibirMensaje(termineR1Equipo2, r1Equipo2)
+          sino
+            RecibirMensaje(termineR2Equipo2, r2Equipo2)
+  fin
+
+variables
+  r1Equipo1: tipoFlorero
+  r2Equipo1: tipoPapelero
+  r1Equipo2: tipoFlorero
+  r2Equipo2: tipoPapelero
+  fiscal: tipoFiscalizador
+comenzar
+  AsignarArea(r1Equipo1, esquinaLEquipo1)
+  AsignarArea(r1Equipo1, verticalLEquipo1)
+  AsignarArea(r1Equipo1, areaJuntar)
+  AsignarArea(r1Equipo1, areaR1Equipo1)
+
+  AsignarArea(r2Equipo1, esquinaLEquipo1)
+  AsignarArea(r2Equipo1, horizontalLEquipo1)
+  AsignarArea(r2Equipo1, areaJuntar)
+  AsignarArea(r2Equipo1, areaR2Equipo1)
+
+  AsignarArea(r1Equipo2, esquinaLEquipo2)
+  AsignarArea(r1Equipo2, verticalLEquipo2)
+  AsignarArea(r1Equipo2, areaJuntar)
+  AsignarArea(r1Equipo2, areaR1Equipo2)
+
+  AsignarArea(r2Equipo2, esquinaLEquipo2)
+  AsignarArea(r2Equipo2, horizontalEquipo2)
+  AsignarArea(r2Equipo2, areaJuntar)
+  AsignarArea(r2Equipo2, areaR2Equipo2)
+
+  AsignarArea(fiscal, areaFiscal)
+
+  Iniciar(r1Equipo1, 50, 50)
+  Iniciar(r2Equipo1, 51, 51)
+  Iniciar(r1Equipo2, 52, 52)
+  Iniciar(r2Equipo2, 53, 53)
+  Iniciar(fiscal, 1, 1)
+
+fin

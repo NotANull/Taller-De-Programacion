@@ -1,0 +1,134 @@
+programa parcialito
+procesos
+  proceso juntarElemento(ES elemento:numero; E esFlor:boolean)
+  comenzar
+    si esFlor
+      mientras HayFlorEnLaEsquina
+        tomarFlor
+        elemento:=elemento + 1
+    sino
+      mientras HayPapelEnLaEsquina
+        tomarPapel
+        elemento:=elemento + 1
+  fin
+  proceso DepositarFlor(ES flores:numero)
+  comenzar
+    si(flores>0)
+      depositarFlor
+      flores:=flores - 1 
+  fin
+  proceso DepositarPapel(ES papeles:numero)
+  comenzar
+    si(papeles>0)
+      depositarPapel
+      papeles:=papeles - 1
+  fin
+areas
+  areaEtapa1y2:AreaPC(5,5,7,7)
+  areaEtapa3:AreaPC(10,10,10,10)
+  areaR1:AreaP(5,4,5,4)
+  areaR2:AreaP(6,4,6,4)
+  areaR3:AreaP(7,4,7,4)
+  areaJefe:AreaP(1,1,1,1)
+robots
+  robot competidor
+  variables 
+    flores:numero
+    papeles:numero
+    id:numero
+    avRecorrido:numero
+    caRecorrido:numero
+    avAnterior:numero
+    caAnterior:numero
+  comenzar
+    RecibirMensaje(id,rJefe)
+    flores:=0
+    papeles:=0
+ {ETAPA 1}
+    realizarEtapa(avRecorrido,5,flores,V,id)
+    RecibirMensaje(avRecorrido,rJefe)
+    Pos(avRecorrido,5)
+    repetir 2
+      juntarElemento(flores,V)
+      mover
+    juntarElemento(flores,V)
+    EnviarMensaje(id,rJefe)
+ {ETAPA 2}
+    RecibirMensaje(caRecorrido,rJefe)
+    Pos(5,caRecorrido)
+    derecha
+    repetir 2
+      juntarElemento(papeles,F)
+      mover
+    juntarElemento(papeles,F)
+    EnviarMensaje(id,rJefe)
+ {ETAPA 3}
+    avAnterior:=PosAv
+    caAnterior:=PosCa
+    mientras (flores>0)
+      BloquearEsquina(10,10)
+      Pos(10,10)
+      DepositarFlor(flores)
+      Pos(avAnterior,caAnterior)
+      LiberarEsquina(10,10)
+    mientras (papeles>0)
+      BloquearEsquina(10,10)
+      Pos(10,10)
+      DepositarPapel(papeles)
+      Pos(avAnterior,caAnterior)
+      LiberarEsquina(10,10)
+    EnviarMensaje(id,rJefe)
+  fin
+  robot jefe
+  variables 
+    id:numero
+    ganadorEtapa1:numero
+    ganadorEtapa2:numero
+  comenzar
+ {Mando Identificadores}
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+ {etapa 1}{Le envio a cada robot una avenida}
+    EnviarMensaje(5,r1)
+    EnviarMensaje(6,r2)
+    EnviarMensaje(7,r3)
+    RecibirMensaje(id,*){Recibo el primero que termina la etapa 1}
+    ganadorEtapa1:=id   {y me lo guardo}
+    repetir 2 {recibo los otros 2 robots restantes y no hago nada con ellos}
+      RecibirMensaje(id,*)
+ {etapa 2}{Le envio a cada robot una calle}
+    EnviarMensaje(6,r1)
+    EnviarMensaje(5,r2)
+    EnviarMensaje(7,r3)
+    RecibirMensaje(id,*){Recibo el primero que termina la etapa 2}
+    ganadorEtapa2:=id   {y me lo guardo}
+    repetir 2{recibo los otros 2 robots restantes y no hago nada con ellos}
+      RecibirMensaje(id,*)
+ {etapa 3}
+    repetir 3 {Espero a que los 3 terminen la etapa 3 y me avisen}
+      RecibirMensaje(id,*)
+    Informar('ganador_etapa_1',ganadorEtapa1){informo los ganadores guardados en la linea n°97 y 105}
+    Informar('ganador_etapa_2',ganadorEtapa2)
+  fin
+variables
+  r1:competidor
+  r2:competidor
+  r3:competidor
+  rJefe:jefe
+comenzar
+  AsignarArea(r1,areaR1)
+  AsignarArea(r2,areaR2)
+  AsignarArea(r3,areaR3)
+  AsignarArea(r1,areaEtapa1y2)
+  AsignarArea(r1,areaEtapa3)
+  AsignarArea(r2,areaEtapa1y2)
+  AsignarArea(r2,areaEtapa3)
+  AsignarArea(r3,areaEtapa1y2)
+  AsignarArea(r3,areaEtapa3)
+  AsignarArea(rJefe,areaJefe)
+  Iniciar(r1,5,4)
+  Iniciar(r2,6,4)
+  Iniciar(r3,7,4)
+  Iniciar(rJefe,1,1)
+fin
