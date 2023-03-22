@@ -13,7 +13,7 @@ b.	Almacene esta información en una estructura óptima para la búsqueda, orden
 c.	Al finalizar la carga (se lee el alumno 'zzz') se debe informar:
 		i. Cuál fue el proyecto ganador: nombre del alumno, tópico y cantidad de votos.
 		ii. Número de votos totales, es decir la suma de los votos de todos los proyectos en los que participa
-				un alumno, ordenador alfabéticamente por nombre del alumno.
+			un alumno, ordenador alfabéticamente por nombre del alumno.
 }
 
 program parcial;
@@ -32,7 +32,13 @@ type
 		topico: cadena30;
 		voto: integer;
 	end;
-		
+	
+	ganador = record
+		alumnoGanador: cadena30;
+		topicoGanador: cadena30;
+		cantVotosGanador: integer;
+	end;
+	
 	lista = ^nodoLista;
 	nodoLista = record
 		dato: datoAGuardar;
@@ -51,7 +57,16 @@ type
 		hd: arbol;
 	end;
 
-
+	regVoto = record
+		nombreAlumno: cadena30;
+		cantTotalVotos: integer;
+	end;
+	
+	listaVotos = ^nodoVoto;
+	nodoVoto = record
+		dato: regVoto;
+		sig: listaVotos;
+	end;
 
 
 
@@ -141,6 +156,127 @@ begin
 end;
 
 
+
+
+procedure proyectoGanador(a: arbol);
+
+	procedure inicializarProyectoGanador(var pGanador: ganador);
+	begin
+		with pGanador do begin
+			alumnoGanador:= '';
+			topicoGanador:= '';
+			cantVotosGanador:= -1;
+		end;
+	end;
+	
+	procedure contarVotos(a: arbol; var pGanador: ganador);
+	
+		procedure procesarVotos(a: arbol; var pGanador: ganador);
+		begin
+			while(a^.dato.listaProyectos <> nil) do begin
+				if(a^.dato.listaProyectos^.dato.voto > pGanador.cantVotosGanador) then begin
+					pGanador.alumnoGanador:= a^.dato.nombreAlumno;
+					pGanador.topicoGanador:= a^.dato.listaProyectos^.dato.topico;
+					pGanador.cantVotosGanador:= a^.dato.listaProyectos^.dato.voto;
+				end;
+				a^.dato.listaProyectos:= a^.dato.listaProyectos^.sig;
+			end;
+		end;
+	
+	begin
+		if(a <> nil) then begin
+			contarVotos(a^.hi, pGanador);
+			procesarVotos(a, pGanador);
+			contarVotos(a^.hd, pGanador);
+		end;
+	end;
+	
+	procedure mostrarGanador(pGanador: ganador);
+	begin
+		writeln('PROYECTO GANADOR');
+		with pGanador do begin
+			writeln('Nombre del alumno: ', alumnoGanador);
+			writeln('Topico: ', topicoGanador);
+			writeln('Cantidad de votos obtenidos: ', cantVotosGanador);
+		end;
+	end;
+
+var
+	pGanador: ganador;
+begin
+	writeln;
+	if(a <> nil) then begin
+		inicializarProyectoGanador(pGanador);
+		contarVotos(a, pGanador);
+		mostrarGanador(pGanador);
+	end
+	else
+		writeln('El arbol esta vacio');
+end;
+
+
+
+
+
+procedure generarLista(a: arbol);
+
+	procedure recorrerArbol(a: arbol; var l: listaVotos);
+	
+		procedure generarNodoLista(var l: listaVotos; alumnoArbol: alumno);
+		
+			function sumarVotos(l: lista): integer;
+			begin
+				if(l = nil) then
+					sumarVotos:= 0
+				else
+					sumarVotos:= sumarVotos(l^.sig) + l^.dato.voto;
+			end;
+		
+		var
+			nue: listaVotos;
+		begin
+			new(nue);
+			nue^.dato.nombreAlumno:= alumnoArbol.nombreAlumno;
+			nue^.dato.cantTotalVotos:= sumarVotos(alumnoArbol.listaProyectos);
+			nue^.sig:= l;
+			l:= nue;
+		end;
+	
+
+	begin
+		if(a <> nil) then begin
+			recorrerArbol(a^.hd, l);
+			generarNodoLista(l, a^.dato);
+			recorrerArbol(a^.hi, l);
+		end;
+	end;
+	
+	procedure imprimirListaVotos(l: listaVotos);
+	begin
+		if(l <> nil) then begin
+			imprimirListaVotos(l^.sig);
+			writeln(l^.dato.nombreAlumno, ' tiene ', l^.dato.cantTotalVotos, ' votos');
+		end;
+	end;
+
+var
+	l: listaVotos;
+begin
+	writeln;
+	if(a <> nil) then begin
+		l:= nil;
+		recorrerArbol(a, l);
+		writeln('SE MUESTRA LA LISTA DE ALUMNOS CON SUS VOTOS');
+		imprimirListaVotos(l);
+	end
+	else
+		writeln('El arbol esta vacio');
+end;
+
+
+
+
+
 procedure imprimirArbol(a: arbol);
 
 	procedure imprimirLista(l: lista);
@@ -164,6 +300,8 @@ var
 	a: arbol;
 begin
 	generarArbol(a);
-	writeln;
-	imprimirArbol(a);
+	proyectoGanador(a);
+	generarLista(a);
+	{writeln;
+	imprimirArbol(a);}
 end.
