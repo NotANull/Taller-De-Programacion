@@ -18,6 +18,10 @@ c.	Al finalizar la carga (se lee el alumno 'zzz') se debe informar:
 
 program parcial;
 
+const
+
+	dimF = 3;
+
 type
 
 	cadena30 = String[30];
@@ -70,17 +74,51 @@ type
 
 
 
+
+
+
+procedure elegirNombre(i: integer; var nombre: String);
+var
+	resultado: String;
+begin
+	case i of
+		1: resultado:= 'Waldo';
+		2: resultado:= 'Omar';
+		3: resultado:= 'Sofia';
+		4: resultado:= 'Robertino';
+		5: resultado:= 'Caitlyn';
+		6: resultado:= 'zzz';
+	end;
+	nombre:= resultado;
+end;
+
+
+
+procedure elegirTopico(i: integer; var topico: String);
+var
+	resultado: String;
+begin
+	case i of
+		1: resultado:= 'volcanes';
+		2: resultado:= 'vida marina';
+		3: resultado:= 'migracion de aves';
+		4: resultado:= 'flora y fauna';
+	end;
+	topico:= resultado;
+end;
+
+
 procedure generarArbol(var a: arbol);
 
 	procedure leerVoto(var v: voto);
 	begin
 		with v do begin
 			darVoto:= 0;
-			write('ingrese nombre del alumno para quien va destinado el voto: ');
-			readln(nombreAlumno);
+			elegirNombre(random(6)+1, nombreAlumno);
+			writeln('ingrese nombre del alumno para quien va destinado el voto: ', nombreAlumno);
 			if(nombreAlumno <> 'zzz') then begin
-				write('Ingrese topico a votar: ');
-				readln(topico);
+				elegirTopico(random(4)+1, topico);
+				writeln('Ingrese topico a votar: ', topico);
 				darVoto:= darVoto + 1;
 				writeln;
 			end;
@@ -171,22 +209,22 @@ procedure proyectoGanador(a: arbol);
 	
 	procedure contarVotos(a: arbol; var pGanador: ganador);
 	
-		procedure procesarVotos(a: arbol; var pGanador: ganador);
+		procedure procesarVotos(alu: alumno; var pGanador: ganador);
 		begin
-			while(a^.dato.listaProyectos <> nil) do begin
-				if(a^.dato.listaProyectos^.dato.voto > pGanador.cantVotosGanador) then begin
-					pGanador.alumnoGanador:= a^.dato.nombreAlumno;
-					pGanador.topicoGanador:= a^.dato.listaProyectos^.dato.topico;
-					pGanador.cantVotosGanador:= a^.dato.listaProyectos^.dato.voto;
+			while(alu.listaProyectos <> nil) do begin
+				if(alu.listaProyectos^.dato.voto > pGanador.cantVotosGanador) then begin
+					pGanador.alumnoGanador:= alu.nombreAlumno;
+					pGanador.topicoGanador:= alu.listaProyectos^.dato.topico;
+					pGanador.cantVotosGanador:= alu.listaProyectos^.dato.voto;
 				end;
-				a^.dato.listaProyectos:= a^.dato.listaProyectos^.sig;
+				alu.listaProyectos:= alu.listaProyectos^.sig;
 			end;
 		end;
 	
 	begin
 		if(a <> nil) then begin
 			contarVotos(a^.hi, pGanador);
-			procesarVotos(a, pGanador);
+			procesarVotos(a^.dato, pGanador);
 			contarVotos(a^.hd, pGanador);
 		end;
 	end;
@@ -299,6 +337,7 @@ end;
 var
 	a: arbol;
 begin
+	Randomize;
 	generarArbol(a);
 	proyectoGanador(a);
 	generarLista(a);
