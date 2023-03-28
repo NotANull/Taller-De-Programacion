@@ -151,6 +151,23 @@ end;
 
 
 
+//--------------------Inciso D--------------------\\
+procedure totalizarExpensas(v:arrayOficinas;diml:integer;var total:real);
+	procedure totalizarRecursivo(v:arrayOficinas; i,diml:integer ;var total:real);
+	begin
+		if(i<=diml)then begin
+			total:=total+v[i].valorExpensas;
+			totalizarRecursivo(v,i+1,diml,total);
+		end;
+	end;
+
+begin
+	total:=0;
+	totalizarRecursivo(v,1,diml,total);
+end;
+
+//--------------------Fin Inciso D--------------------\\
+
 
 
 
@@ -164,6 +181,7 @@ end;
 var
 	af: arrayOficinas;
 	dimL: integer;
+	totalExpensas:real;
 begin
 	Randomize;
 	
@@ -176,6 +194,8 @@ begin
 	writeln('----------------------------------------');
 	
 	buscarEnArray(af, dimL); //Inciso C
+	
+	totalizarExpensas(af,dimL,totalExpensas)//Inciso D
 	
 	//mostrarArrayOrdenado(af, dimL);
 end.
