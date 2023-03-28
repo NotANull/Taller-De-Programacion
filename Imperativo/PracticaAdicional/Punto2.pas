@@ -15,7 +15,13 @@ type
 		marca: str10;
 		modelo: str10;
 	end;
-
+	
+	autoAguardar = record 
+		patente:str10;
+		marca:str10;
+		modelo:str10;
+	end;
+	
 	arbol = ^nodoA;
 	nodoA = record
 		dato: auto;
@@ -25,7 +31,7 @@ type
 
 	listaAutos = ^nodoL;
 	nodoL = record
-		dato: auto;
+		dato: autoAguardar;
 		sig: listaAutos;
 	end;
 
@@ -223,10 +229,17 @@ procedure GenerarArrayListas(a: arbol);
 				ant^.sig:= nue;
 			nue^.sig:= act;
 		end;
-	
+		procedure formatearRegistro(a:auto;var aug:autoAguardar);
+		begin
+			aug.patente:=a.patente;
+			aug.marca:=a.marca;
+			aug.modelo:=a.modelo;
+		end;
+	var aug:autoAguardar;
 	begin
 		if(a <> nil) then begin
-			insertarOrdenado(al[a^.dato.anioFabricacion], a^.dato);
+			formatearRegistro(a^.dato,aug);           //quito el año de fabricacion antes de guardar el auto;
+			insertarOrdenado(al[a^.dato.anioFabricacion], aug);   //guardo el auto sin el año
 			recorrerArbol(a^.hi, al);
 			recorrerArbol(a^.hd, al);
 		end;
@@ -252,7 +265,7 @@ end;
 //--------------------Inciso D--------------------\\
 procedure buscarPatente(a: arbol);
 
-	function buscarEnArbol(a: arbol; patenteABuscar: str10): boolean;
+	{function buscarEnArbol(a: arbol; patenteABuscar: str10): boolean;     
 	begin
 		if(a = nil) then
 			buscarEnArbol:= false
@@ -263,19 +276,30 @@ procedure buscarPatente(a: arbol);
 		else
 			buscarEnArbol:= buscarEnArbol(a^.hd, patenteABuscar)
 	end;
+	}
+	function buscarEnArbol(a:arbol; patenteABuscar:str10):integer;
+	begin
+		if(a=nil)then 
+			buscarEnArbol:=-1
+			else if(a^.dato.patente=patenteABuscar)then
+				buscarEnArbol:=a^.dato.anioFabricacion
+			else if(patenteABuscar<a^.dato.patenteABuscar)then
+				buscarEnArbol:=buscarEnArbol(a^.hi,patenteABuscar)
+				else buscarEnArbol:=buscarEnArbol(a^.hd,patenteABuscar);
+	end;
 
 var
 	patenteABuscar: str10;
 begin
 	randomString(1, patenteABuscar);
 	writeln('Se busca la patente del auto: ', patenteABuscar);
-	
-	if(a = nil) then
+	aniodeFabricacionEncontrado:=buscarEnArbol(a,patenteABuscar);    //la consigna pide el año de fabricacion de la patente a buscar...
+	if(a = nil) then 
 		writeln('El arbol esta vacio')
-	else if(buscarEnArbol(a, patenteABuscar)) then
-		writeln('La patente ', patenteABuscar, ' se encuentra en el arbol')
+	else if(aniodeFabricacionEncontrado = -1) then
+		writeln('la patente no se encuentra en el arbol')
 	else
-		writeln('La patente no se encuentra en el arbol');
+		writeln('Anio de fabricacion de patente',patenteABuscar,' = ',aniodeFabricacionEncontrado);
 end;
 //--------------------Fin Inciso D--------------------\\
 
