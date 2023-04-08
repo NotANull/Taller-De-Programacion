@@ -207,28 +207,29 @@ end;
 
 procedure generarLista(a: arbol; var l: lista);
 
-	procedure insertarOrdenado(var l: lista; b: banda);
-	var
-		nue, ant, act: lista;
-	begin
-		new(nue);
-		nue^.dato.nombre:= b.nombre;
-		nue^.dato.estilo:= b.estilo;
-		nue^.dato.integrantes:= b.integrantes;
-		ant:= l;
-		act:= l;
-		while( (act <> nil) and (act^.dato.estilo > b.estilo) ) do begin
-			ant:= act;
-			act:= act^.sig;
-		end;
-		if(act = l) then
-			l:= nue
-		else
-			ant^.sig:= nue;
-		nue^.sig:= act;
-	end;
-
 	procedure recorrerArbol(a: arbol; var l: lista);
+
+		procedure insertarOrdenado(var l: lista; b: banda);
+		var
+			nue, ant, act: lista;
+		begin
+			new(nue);
+			nue^.dato.nombre:= b.nombre;
+			nue^.dato.estilo:= b.estilo;
+			nue^.dato.integrantes:= b.integrantes;
+			ant:= l;
+			act:= l;
+			while( (act <> nil) and (act^.dato.estilo > b.estilo) ) do begin
+				ant:= act;
+				act:= act^.sig;
+			end;
+			if(act = l) then
+				l:= nue
+			else
+				ant^.sig:= nue;
+			nue^.sig:= act;
+		end;
+
 	begin
 		if(a <> nil) then begin
 			recorrerArbol(a^.hi, l);
