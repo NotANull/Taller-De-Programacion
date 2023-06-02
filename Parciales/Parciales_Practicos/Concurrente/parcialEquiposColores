@@ -1,0 +1,176 @@
+programa parcialEquipos
+
+procesos
+
+	proceso juntarFlores(ES flores: numero)
+	comenzar
+		mientras(HayFlorEnLaEsquina)
+			tomarFlor
+			flores:= flores + 1
+	fin
+
+	proceso juntarPapeles(ES papeles: numero)
+	comenzar
+		mientras(HayPapelEnLaEsquina)
+			tomarPapel
+			papeles:= papeles + 1
+	fin
+
+	proceso trabajarFloreros(ES flores: numero)
+	comenzar
+		derecha
+		repetir 4
+			juntarFlores(flores)
+			mover
+		juntarFlores(flores)
+		BloquearEsquina(PosAv + 1, PosCa)
+		mover
+		juntarFlores(flores)
+		mover
+		LiberarEsquina(PosAv - 1, PosCa)
+		repetir 3
+			juntarFlores(flores)
+			mover
+		juntarFlores(flores)
+	fin
+
+	proceso trabajarPapeleros(ES papeles: numero)
+	comenzar
+		mientras(PosCa < 11)
+			juntarPapeles(papeles)
+			mover
+		juntarPapeles(papeles)
+		BloquearEsquina(PosAv, PosCa + 1)
+		mover
+		juntarPapeles(papeles)
+		mover
+		LiberarEsquina(PosAv, PosCa - 1)
+		mientras(PosCa < 23)
+			juntarPapeles(papeles)
+			mover
+		juntarPapeles(papeles)
+	fin
+
+	proceso identificarRobots
+	comenzar
+		EnviarMensaje(1, floreroAzul)
+		EnviarMensaje(2, papeleroAzul)
+		EnviarMensaje(3, floreroVerde)
+		EnviarMensaje(4, papeleroVerde)
+	fin
+
+areas
+
+	{Áreas para el equipo azul}
+	{Florero}
+	areaFloreroAzul1: AreaP(2, 12, 6, 12)
+	areaFloreroAzul2: AreaP(8, 12, 11, 12)
+	{Papelero}
+	areaPapeleroAzul1: AreaP(7, 4, 7, 11)
+	areaPapeleroAzul2: AreaP(7, 13, 7, 23)
+	areaComunAzul: AreaPC(7, 12, 7, 12)
+
+	{Áreas para el equipo verde}
+	{Florero}
+	areaFloreroVerde1: AreaP(16, 12, 20, 12)
+	areaFloreroVerde2: AreaP(22, 12, 25, 12)
+	{Papelero}
+	areaPapeleroVerde1: AreaP(21, 4, 21, 11)
+	areaPapeleroVerde2: AreaP(21, 13, 21, 23)
+	areaComunVerde: AreaPC(21, 12, 21, 12)
+
+	{Área para el fiscal}
+	areaFiscal: AreaP(1, 1, 1, 1)
+
+robots
+
+	robot tipoFlorero
+	variables
+		quienSoy: numero
+		flores: numero
+	comenzar
+		RecibirMensaje(quienSoy, fiscal)
+		flores:= 0
+		trabajarFloreros(flores)
+		EnviarMensaje(quienSoy, fiscal)
+		EnviarMensaje(flores, fiscal)
+	fin
+
+	robot tipoPapelero
+	variables
+		quienSoy: numero
+		papeles: numero
+	comenzar
+		RecibirMensaje(quienSoy, fiscal)
+		papeles:= 0
+		trabajarPapeleros(papeles)
+		EnviarMensaje(quienSoy, fiscal)
+		EnviarMensaje(papeles, fiscal)
+	fin
+
+	robot tipoFiscalizador
+	variables
+		nRobot: numero
+		elementos: numero
+		ElementosEquipoAzul: numero
+		elementosEquipoVerde: numero
+	comenzar
+		ElementosEquipoAzul:= 0
+		elementosEquipoVerde:= 0
+		identificarRobots
+
+		repetir 4
+			RecibirMensaje(nRobot, *) {Recibo mensaje de r1, r2, r3 ó r4}
+			si( (nRobot = 1) | (nRobot = 2) )
+				RecibirMensaje(elementos, *) {Recibo mensaje solo de r1 ó r2 ya que estoy dentro de la condición}
+				ElementosEquipoAzul:= ElementosEquipoAzul + elementos
+			sino
+				si( (nRobot = 3) | (nRobot = 4) )
+					RecibirMensaje(elementos, *) {Recibo mensaje solo de r3 ó r4 ya que estoy dentro de la condición}
+					elementosEquipoVerde:= elementosEquipoVerde + elementos
+
+		si(ElementosEquipoAzul > elementosEquipoVerde)
+			Informar('Ganador_equipo_Azul',12)
+		sino
+			si(elementosEquipoVerde > ElementosEquipoAzul)
+				Informar('Ganador_equipo_Verde',34)
+			sino
+				Informar('Empate',00)
+
+	fin
+
+variables
+
+	floreroAzul: tipoFlorero
+	papeleroAzul: tipoPapelero
+	floreroVerde: tipoFlorero
+	papeleroVerde: tipoPapelero
+	fiscal: tipoFiscalizador
+
+comenzar
+
+	AsignarArea(floreroAzul, areaFloreroAzul1)
+	AsignarArea(floreroAzul, areaFloreroAzul2)
+	AsignarArea(floreroAzul, areaComunAzul)
+
+	AsignarArea(papeleroAzul, areaPapeleroAzul1)
+	AsignarArea(papeleroAzul, areaPapeleroAzul2)
+	AsignarArea(papeleroAzul, areaComunAzul)
+
+	AsignarArea(floreroVerde, areaFloreroVerde1)
+	AsignarArea(floreroVerde, areaFloreroVerde2)
+	AsignarArea(floreroVerde, areaComunVerde)
+
+	AsignarArea(papeleroVerde, areaPapeleroVerde1)
+	AsignarArea(papeleroVerde, areaPapeleroVerde2)
+	AsignarArea(papeleroVerde, areaComunVerde)
+
+	AsignarArea(fiscal, areaFiscal)
+
+	Iniciar(floreroAzul, 2, 12)
+	Iniciar(papeleroAzul, 7, 4)
+	Iniciar(floreroVerde, 16, 12)
+	Iniciar(papeleroVerde, 21, 4)
+	Iniciar(fiscal, 1, 1)
+
+fin
