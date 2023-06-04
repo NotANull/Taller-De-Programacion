@@ -1,0 +1,358 @@
+programa parcialEquiposGrandes
+
+procesos
+
+	proceso depositar(E flores: numero)
+	variables
+		avActual: numero
+		caActual: numero
+	comenzar
+		avActual:= PosAv
+		caActual:= PosCa
+		repetir flores
+			BloquearEsquina(20, 20)
+			Pos(20, 20)
+			depositarFlor
+			Pos(avActual, caActual)
+			LiberarEsquina(20, 20)
+	fin
+
+	proceso juntar(ES flores: numero)
+	comenzar
+		mientras(HayFlorEnLaEsquina)
+			tomarFlor
+			flores:= flores + 1
+	fin
+
+	proceso recolectar(ES flores: numero)
+	variables
+		quienesSon: numero
+	comenzar
+		repetir 10
+			repetir 2
+				RecibirMensaje(quienesSon, *)
+			mover
+			juntar(flores)
+	fin
+
+	proceso trabajarSupVerde(E quienSoy: numero)
+	variables
+		avActual: numero
+		caActual: numero
+		ok: boolean
+		quienEs: numero
+	comenzar
+		repetir 3
+			derecha
+		mover {Entro al área de trabajo}
+		repetir 9
+			avActual:= PosAv
+			caActual:= PosCa
+			ok:= V
+			mientras(ok)
+				si(HayFlorEnLaEsquina)
+					tomarFlor
+					BloquearEsquina(PosAv, PosCa - 1)
+					Pos(PosAv, PosCa - 1)
+					depositarFlor
+					Pos(avActual, caActual)
+					LiberarEsquina(PosAv, PosCa - 1)
+				sino
+					ok:= F
+					mover
+					EnviarMensaje(quienSoy, infVerde)
+					RecibirMensaje(quienEs, infVerde)
+					EnviarMensaje(quienSoy, medioVerde)
+		avActual:= PosAv
+		caActual:= PosCa
+		ok:= V
+		mientras(ok)
+			si(HayFlorEnLaEsquina)
+				tomarFlor
+				BloquearEsquina(PosAv, PosCa - 1)
+				Pos(PosAv, PosCa - 1)
+				depositarFlor
+				Pos(avActual, caActual)
+				LiberarEsquina(PosAv, PosCa - 1)
+			sino
+				ok:= F
+				EnviarMensaje(quienSoy, infVerde)
+				RecibirMensaje(quienEs, infVerde)
+				EnviarMensaje(quienSoy, medioVerde)
+	fin
+
+	proceso trabajarInfVerde(E quienSoy: numero)
+	variables
+		avActual: numero
+		caActual: numero
+		ok: boolean
+		quienEs: numero
+	comenzar
+		repetir 3
+			derecha
+		mover {Entro al área de trabajo}
+		repetir 9
+			avActual:= PosAv
+			caActual:= PosCa
+			ok:= V
+			mientras(ok)
+				si(HayFlorEnLaEsquina)
+					tomarFlor
+					BloquearEsquina(PosAv, PosCa + 1)
+					Pos(PosAv, PosCa + 1)
+					depositarFlor
+					Pos(avActual, caActual)
+					LiberarEsquina(PosAv, PosCa + 1)
+				sino
+					ok:= F
+					mover
+					EnviarMensaje(quienSoy, supVerde)
+					RecibirMensaje(quienEs, supVerde)
+					EnviarMensaje(quienSoy, medioVerde)
+		avActual:= PosAv
+		caActual:= PosCa
+		ok:= V
+		mientras(ok)
+			si(HayFlorEnLaEsquina)
+				tomarFlor
+				BloquearEsquina(PosAv, PosCa + 1)
+				Pos(PosAv, PosCa + 1)
+				depositarFlor
+				Pos(avActual, caActual)
+				LiberarEsquina(PosAv, PosCa + 1)
+			sino
+				ok:= F
+				EnviarMensaje(quienSoy, supVerde)
+				RecibirMensaje(quienEs, supVerde)
+				EnviarMensaje(quienSoy, medioVerde)
+	fin
+
+	proceso trabajarSupAzul(E quienSoy: numero)
+	variables
+		avActual: numero
+		caActual: numero
+		ok: boolean
+		quienEs: numero
+	comenzar
+		derecha
+		mover {Entro al área de trabajo}
+		repetir 9
+			avActual:= PosAv
+			caActual:= PosCa
+			ok:= V
+			mientras(ok)
+				si(HayFlorEnLaEsquina)
+					tomarFlor
+					BloquearEsquina(PosAv, PosCa - 1)
+					Pos(PosAv, PosCa - 1)
+					depositarFlor
+					Pos(avActual, caActual)
+					LiberarEsquina(PosAv, PosCa - 1)
+				sino
+					ok:= F
+					mover
+					EnviarMensaje(quienSoy, infAzul)
+					RecibirMensaje(quienEs, infAzul)
+					EnviarMensaje(quienSoy, medioAzul)
+		avActual:= PosAv
+		caActual:= PosCa
+		ok:= V
+		mientras(ok)
+			si(HayFlorEnLaEsquina)
+				tomarFlor
+				BloquearEsquina(PosAv, PosCa - 1)
+				Pos(PosAv, PosCa - 1)
+				depositarFlor
+				Pos(avActual, caActual)
+				LiberarEsquina(PosAv, PosCa - 1)
+			sino
+				ok:= F
+				EnviarMensaje(quienSoy, infAzul)
+				RecibirMensaje(quienEs, infAzul)
+				EnviarMensaje(quienSoy, medioAzul)
+	fin
+
+	proceso trabajarInfAzul(E quienSoy: numero)
+	variables
+		avActual: numero
+		caActual: numero
+		ok: boolean
+		quienEs: numero
+	comenzar
+		derecha
+		mover {Entro al área de trabajo}
+		repetir 9
+			avActual:= PosAv
+			caActual:= PosCa
+			ok:= V
+			mientras(ok)
+				si(HayFlorEnLaEsquina)
+					tomarFlor
+					BloquearEsquina(PosAv, PosCa + 1)
+					Pos(PosAv, PosCa + 1)
+					depositarFlor
+					Pos(avActual, caActual)
+					LiberarEsquina(PosAv, PosCa + 1)
+				sino
+					ok:= F
+					mover
+					EnviarMensaje(quienSoy, supAzul)
+					RecibirMensaje(quienEs, supAzul)
+					EnviarMensaje(quienSoy, medioAzul)
+		avActual:= PosAv
+		caActual:= PosCa
+		ok:= V
+		mientras(ok)
+			si(HayFlorEnLaEsquina)
+				tomarFlor
+				BloquearEsquina(PosAv, PosCa + 1)
+				Pos(PosAv, PosCa + 1)
+				depositarFlor
+				Pos(avActual, caActual)
+				LiberarEsquina(PosAv, PosCa + 1)
+			sino
+				ok:= F
+				EnviarMensaje(quienSoy, supAzul)
+				RecibirMensaje(quienEs, supAzul)
+				EnviarMensaje(quienSoy, medioAzul)
+	fin
+
+	proceso identificarRobots
+	comenzar
+		EnviarMensaje(1, supAzul)
+		EnviarMensaje(2, medioAzul)
+		EnviarMensaje(3, infAzul)
+		EnviarMensaje(4, supVerde)
+		EnviarMensaje(5, medioVerde)
+		EnviarMensaje(6, infVerde)
+	fin
+
+areas
+
+	{Áreas para el equipo azul}
+	areaSupAzul: AreaP(9, 21, 9, 21)
+	areaMedioAzul: AreaP(9, 20, 9, 20)
+	areaInfAzul: AreaP(9, 19, 9, 19)
+	{Áreas trabajo azul}
+	lateralSupAzul: AreaP(10, 21, 19, 21)
+	lateralMedioAzul: AreaPC(10, 20, 19, 20)
+	lateralInfAzul: AreaP(10, 19, 19, 19)
+
+	{Áreas para el equipo verde}
+	areaSupVerde: AreaP(31, 21, 31, 21)
+	areaMedioVerde: AreaP(31, 20, 31, 20)
+	areaInfVerde: AreaP(31, 19, 31, 19)
+	{Áreas trabajo verde}
+	lateralSupVerde: AreaP(21, 21, 30, 21)
+	lateralMedioVerde: AreaPC(21, 20, 30, 20)
+	lateralInfVerde: AreaP(21, 19, 30, 19)
+
+	areaFiscal: AreaP(20, 18, 20, 18)
+	areaDeposito: AreaPC(20, 20, 20, 20)
+
+robots
+
+	robot tipoSupAzul
+	variables
+		quienSoy: numero
+	comenzar
+		RecibirMensaje(quienSoy, fiscal)
+		trabajarSupAzul(quienSoy)
+	fin
+
+	robot tipoInfAzul
+	variables
+		quienSoy: numero
+	comenzar
+		RecibirMensaje(quienSoy, fiscal)
+		trabajarInfAzul(quienSoy)
+	fin
+
+	robot tipoSupVerde
+	variables
+		quienSoy: numero
+	comenzar
+		RecibirMensaje(quienSoy, fiscal)
+		trabajarSupVerde(quienSoy)
+	fin
+
+	robot tipoInfVerde
+	variables
+		quienSoy: numero
+	comenzar
+		RecibirMensaje(quienSoy, fiscal)
+		trabajarInfVerde(quienSoy)
+	fin
+
+	robot tipoDeposito
+	variables
+		quienSoy: numero
+		flores: numero
+	comenzar
+		RecibirMensaje(quienSoy, fiscal)
+		si(quienSoy = 2)
+			derecha
+		sino
+			repetir 3
+				derecha {SÉ QUE ESTÁ MAL PERO ES DE PRUEBA. CORREGIR!!!!!!!!!!!!!!!!!!!}
+		flores:= 0
+		recolectar(flores)
+		depositar(flores)
+	fin
+
+	robot tipoFiscalizador
+	comenzar
+		identificarRobots
+	fin
+
+variables
+
+	supAzul: tipoSupAzul
+	medioAzul: tipoDeposito
+	infAzul: tipoInfAzul
+
+	supVerde: tipoSupVerde
+	medioVerde: tipoDeposito
+	infVerde: tipoInfVerde
+
+	fiscal: tipoFiscalizador
+
+comenzar
+
+	AsignarArea(supAzul, areaSupAzul)
+	AsignarArea(supAzul, lateralSupAzul)
+	AsignarArea(supAzul, lateralMedioAzul)
+
+	AsignarArea(medioAzul, areaMedioAzul)
+	AsignarArea(medioAzul, lateralMedioAzul)
+	AsignarArea(medioAzul, areaDeposito)
+
+	AsignarArea(infAzul, areaInfAzul)
+	AsignarArea(infAzul, lateralInfAzul)
+	AsignarArea(infAzul, lateralMedioAzul)
+
+	AsignarArea(supVerde, areaSupVerde)
+	AsignarArea(supVerde, lateralSupVerde)
+	AsignarArea(supVerde, lateralMedioVerde)
+
+	AsignarArea(medioVerde, areaMedioVerde)
+	AsignarArea(medioVerde, lateralMedioVerde)
+	AsignarArea(medioVerde, areaDeposito)
+
+	AsignarArea(infVerde, areaInfVerde)
+	AsignarArea(infVerde, lateralInfVerde)
+	AsignarArea(infVerde, lateralMedioVerde)
+
+	AsignarArea(fiscal, areaFiscal)
+
+	Iniciar(supAzul, 9, 21)
+	Iniciar(medioAzul, 9, 20)
+	Iniciar(infAzul, 9, 19)
+
+	Iniciar(supVerde, 31, 21)
+	Iniciar(medioVerde, 31, 20)
+	Iniciar(infVerde, 31, 19)
+
+	Iniciar(fiscal, 20, 18)
+
+fin
