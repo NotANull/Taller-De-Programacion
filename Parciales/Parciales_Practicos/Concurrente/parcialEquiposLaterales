@@ -298,11 +298,50 @@ robots
 		flores:= 0
 		recolectar(flores)
 		depositar(flores)
+		EnviarMensaje(quienSoy, fiscal)
+		EnviarMensaje(flores, fiscal)
 	fin
 
 	robot tipoFiscalizador
+	variables
+		hayPrimero: boolean
+		nRobot: numero
+		floresAzul: numero
+		floresVerde: numero
 	comenzar
+		hayPrimero:= F
 		identificarRobots
+
+		{El fiscal solo recibe mensaje de un solo robot (quien termina primero) y de alguna manera tengo que recibir del que falta...}
+		{Entonces cuando salga del bucle recibo el mensaje que falta más abajo}
+		mientras(~hayPrimero)
+			RecibirMensaje(nRobot, *)
+			si(nRobot = 2)
+				RecibirMensaje(floresAzul, medioAzul)
+				Informar('Equipo_azul_terminó_primero_',123)
+				hayPrimero:= V
+			sino
+				si(nRobot = 5)
+					RecibirMensaje(floresVerde, medioVerde)
+					Informar('Equipo_verde_terminó_primero_',456)
+					hayPrimero:= V
+
+		{Acá recibo el mensaje que falta}
+		RecibirMensaje(nRobot, *)
+		si(nRobot = 2)
+			RecibirMensaje(floresAzul, medioAzul)
+		sino
+			si(nRobot = 5)
+				RecibirMensaje(floresVerde, medioVerde)
+
+		si(floresAzul > floresVerde)
+			Informar('El_equipo_azul_recolectó_más_flores_',123)
+		sino
+			si(floresVerde > floresAzul)
+				Informar('El_equipo_verde_recolectó_más_flores_',456)
+			sino
+				Informar('Empate',0)
+
 	fin
 
 variables
