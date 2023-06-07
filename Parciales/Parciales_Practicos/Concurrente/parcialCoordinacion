@@ -1,0 +1,160 @@
+programa coordinacion
+
+procesos
+
+	proceso depositar(E flores: numero)
+	variables
+		avActual: numero
+		caActual: numero
+	comenzar
+		repetir flores
+			avActual:= PosAv
+			caActual:= PosCa
+			BloquearEsquina(10, 10)
+			Pos(10, 10)
+			depositarFlor
+			Pos(avActual, caActual)
+			LiberarEsquina(10, 10)
+	fin
+
+	proceso procesarGanador(E flores: numero; E nRobot: numero; ES floresMax: numero; ES nRobotGanador: numero)
+	comenzar
+		si(flores > floresMax)
+			floresMax:= flores
+			nRobotGanador:= nRobot
+	fin
+
+	proceso juntar(ES flores: numero)
+	comenzar
+		mientras(HayFlorEnLaEsquina)
+			tomarFlor
+			flores:= flores + 1
+	fin
+
+	proceso trabajar(E quienSoy: numero; ES flores: numero)
+	variables
+		sigo: boolean
+	comenzar
+		repetir 2
+			repetir 5
+				juntar(flores)
+				mover
+			derecha
+			EnviarMensaje(quienSoy, coordinador)
+			RecibirMensaje(sigo, coordinador)
+			repetir 5
+				juntar(flores)
+				mover
+			derecha
+			EnviarMensaje(quienSoy, coordinador)
+			RecibirMensaje(sigo, coordinador)
+	fin
+
+	proceso identificarRobots
+	comenzar
+		EnviarMensaje(1, r1)
+		EnviarMensaje(2, r2)
+		EnviarMensaje(3, r3)
+	fin
+
+areas
+
+	areaTrabajador1: AreaP(1, 1, 6, 6)
+	areaTrabajador2: AreaP(7, 1, 12, 6)
+	areaTrabajador3: AreaP(13, 1, 18, 6)
+	areaCoordinador: AreaP(20, 1, 20, 1)
+	areaDeposito: AreaPC(10, 10, 10, 10)
+
+robots
+
+	robot tipoTrabajador
+	variables
+		quienSoy: numero
+		flores: numero
+		ok: boolean
+	comenzar
+		RecibirMensaje(quienSoy, coordinador)
+		flores:= 0
+		trabajar(quienSoy, flores)
+		EnviarMensaje(quienSoy, coordinador)
+		EnviarMensaje(flores, coordinador)
+		RecibirMensaje(ok, coordinador)
+		si(ok)
+			depositar(flores)
+	fin
+
+
+	robot tipoCoordinador
+	variables
+		nRobot: numero
+		flores: numero
+		floresMax: numero
+		nRobotGanador: numero
+	comenzar
+		identificarRobots
+		floresMax:= -1
+
+		repetir 4
+			repetir 3
+				RecibirMensaje(nRobot, *)
+			EnviarMensaje(V, r1)
+			EnviarMensaje(V, r2)
+			EnviarMensaje(V, r3)
+
+		repetir 3
+			RecibirMensaje(nRobot, *)
+			si(nRobot = 1)
+				RecibirMensaje(flores, r1)
+				procesarGanador(flores, nRobot, floresMax, nRobotGanador)
+			sino
+				si(nRobot = 2)
+					RecibirMensaje(flores, r2)
+					procesarGanador(flores, nRobot, floresMax, nRobotGanador)
+				sino
+					RecibirMensaje(flores, r3)
+					procesarGanador(flores, nRobot, floresMax, nRobotGanador)
+
+		Informar('El_ganador_es_el_robot_',nRobotGanador)
+
+		si(nRobotGanador = 1)
+			EnviarMensaje(F, r1)
+			EnviarMensaje(V, r2)
+			EnviarMensaje(V, r3)
+		sino
+			si(nRobotGanador = 2)
+				EnviarMensaje(V, r1)
+				EnviarMensaje(F, r2)
+				EnviarMensaje(V, r3)
+			sino
+				si(nRobotGanador = 3)
+					EnviarMensaje(V, r1)
+					EnviarMensaje(V, r2)
+					EnviarMensaje(F, r3)
+	fin
+
+variables
+
+	r1: tipoTrabajador
+	r2: tipoTrabajador
+	r3: tipoTrabajador
+	coordinador: tipoCoordinador
+
+comenzar
+
+	AsignarArea(r1, areaTrabajador1)
+	AsignarArea(r1, areaDeposito)
+
+	AsignarArea(r2, areaTrabajador2)
+	AsignarArea(r2, areaDeposito)
+
+	AsignarArea(r3, areaTrabajador3)
+	AsignarArea(r3, areaDeposito)
+
+	AsignarArea(coordinador, areaCoordinador)
+
+	Iniciar(r1, 1, 1)
+	Iniciar(r2, 7, 1)
+	Iniciar(r3, 13, 1)
+	Iniciar(coordinador, 20, 1)
+
+fin
