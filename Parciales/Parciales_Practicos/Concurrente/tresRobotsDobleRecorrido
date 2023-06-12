@@ -1,0 +1,155 @@
+programa salum
+
+procesos
+
+	proceso identificarRobots
+	comenzar
+		EnviarMensaje(1, r1)
+		EnviarMensaje(2, r2)
+		EnviarMensaje(3, r3)
+	fin
+
+	proceso enviarFinalistas(E nRobotMax1: numero; E nRobotMax2: numero)
+	comenzar
+		si( ( (nRobotMax1 = 1) & (nRobotMax2 = 2) ) | (nRobotMax1 = 2) & (nRobotMax2 = 1) )
+			EnviarMensaje(V, r1)
+			EnviarMensaje(V, r2)
+			EnviarMensaje(F, r3)
+		sino
+			si( ( (nRobotMax1 = 1) & (nRobotMax2 = 3) ) | (nRobotMax1 = 3) & (nRobotMax2 = 1) )
+				EnviarMensaje(V, r1)
+				EnviarMensaje(F, r2)
+				EnviarMensaje(V, r3)
+			sino
+				si( ( (nRobotMax1 = 2) & (nRobotMax2 = 3) ) | (nRobotMax1 = 3) & (nRobotMax2 = 2) )
+					EnviarMensaje(F, r1)
+					EnviarMensaje(V, r2)
+					EnviarMensaje(V, r3)
+	fin
+
+	proceso procesarMaximos(E flores: numero; E nRobot: numero; ES floresMax1: numero; ES nRobotMax1: numero; ES floresMax2: numero; ES nRobotMax2: numero)
+	comenzar
+		si(flores > floresMax1)
+			floresMax2:= floresMax1
+			nRobotMax2:= nRobotMax1
+			floresMax1:= flores
+			nRobotMax1:= nRobot
+		sino
+			si(flores > floresMax2)
+				floresMax2:= flores
+				nRobotMax2:= nRobot
+	fin
+
+	proceso juntarF(ES flores: numero)
+	comenzar
+		mientras(HayFlorEnLaEsquina)
+			tomarFlor
+			flores:= flores + 1
+	fin
+
+	proceso juntarP(ES papeles: numero)
+	comenzar
+		mientras(HayPapelEnLaEsquina)
+			tomarPapel
+			papeles:= papeles + 1
+	fin
+
+	proceso buscarPapeles(ES papeles: numero)
+	comenzar
+		repetir 9
+			juntarP(papeles)
+			mover
+		juntarP(papeles)
+	fin
+
+	proceso buscarFlores(ES flores: numero)
+	comenzar
+		repetir 9
+			juntarF(flores)
+			mover
+		juntarF(flores)
+	fin
+
+areas
+
+	areaR1: AreaP(5, 1, 5, 10)
+	areaR2: AreaP(6, 1, 6, 10)
+	areaR3: AreaP(7, 1, 7, 10)
+	areaCoordinador: AreaP(1, 1, 1, 1)
+
+robots
+
+	robot tipoRecolector
+	variables
+		quienSoy: numero
+		flores: numero
+		papeles: numero
+		avActual: numero
+		caActual: numero
+		ok: boolean
+	comenzar
+		RecibirMensaje(quienSoy, coordinador)
+		flores:= 0
+		papeles:= 0
+		avActual:= PosAv
+		caActual:= PosCa
+		buscarFlores(flores)
+		EnviarMensaje(quienSoy, coordinador)
+		EnviarMensaje(flores, coordinador)
+		RecibirMensaje(ok, coordinador)
+		si(ok)
+			Pos(avActual, caActual)
+			buscarPapeles(papeles)
+			EnviarMensaje(quienSoy, coordinador)
+			EnviarMensaje(papeles, coordinador)
+	fin
+
+	robot tipoCoordinador
+	variables
+		nRobot: numero
+		flores: numero
+		nRobotMax1: numero
+		nRobotMax2: numero
+		floresMax1: numero
+		floresMax2: numero
+	comenzar
+		identificarRobots
+		floresMax1:= -1
+		floresMax2:= -1
+		repetir 3
+			RecibirMensaje(nRobot, *)
+			si(nRobot = 1)
+				RecibirMensaje(flores, r1)
+				procesarMaximos(flores, nRobot, floresMax1, nRobotMax1, floresMax2, nRobotMax2)
+			sino
+				si(nRobot = 2)
+					RecibirMensaje(flores, r2)
+					procesarMaximos(flores, nRobot, floresMax1, nRobotMax1, floresMax2, nRobotMax2)
+				sino
+					RecibirMensaje(flores, r3)
+					procesarMaximos(flores, nRobot, floresMax1, nRobotMax1, floresMax2, nRobotMax2)
+
+		enviarFinalistas(nRobotMax1, nRobotMax2)
+		RecibirMensaje(nRobot, *)
+		Informar('Quien_terminó_primero_fue_el_robot',nRobot)
+	fin
+
+variables
+
+	r1: tipoRecolector
+	r2: tipoRecolector
+	r3: tipoRecolector
+	coordinador: tipoCoordinador
+
+comenzar
+
+	AsignarArea(r1, areaR1)
+	AsignarArea(r2, areaR2)
+	AsignarArea(r3, areaR3)
+	AsignarArea(coordinador, areaCoordinador)
+	Iniciar(r1, 5, 1)
+	Iniciar(r2, 6, 1)
+	Iniciar(r3, 7, 1)
+	Iniciar(coordinador, 1, 1)
+
+fin
